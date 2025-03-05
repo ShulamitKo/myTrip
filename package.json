@@ -1,0 +1,27 @@
+{
+  "name": "mytrip",
+  "version": "1.0.0",
+  "description": "אפליקציה לניהול הטיול שלי לבודפסט",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx serve www",
+    "build": "npm run copy",
+    "copy": "npx cap copy",
+    "open:android": "npx cap open android",
+    "sync": "npx cap sync"
+  },
+  "keywords": [
+    "travel",
+    "budapest",
+    "trip",
+    "planner"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@capacitor/android": "^7.0.1",
+    "@capacitor/cli": "^7.0.1",
+    "@capacitor/core": "^7.0.1",
+    "serve": "^14.2.4"
+  }
+}

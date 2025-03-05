@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הטיול שלי לבודפסט</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a6da7;
+            --secondary-color: #8e44ad;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: var(--dark-color);
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .tabs {
+            display: flex;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.8rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+        
+        .tab.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 1rem;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .add-item {
+            display: flex;
+            margin-bottom: 1rem;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .add-item input {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+        }
+        
+        .add-item button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .add-item button:hover {
+            background-color: #3c5a8a;
+        }
+        
+        .item-list {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+        
+        .item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.3s;
+        }
+        
+        .item:last-child {
+            border-bottom: none;
+        }
+        
+        .item.completed {
+            background-color: #f8f9fa;
+        }
+        
+        .item.completed .item-text {
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+        
+        .checkbox {
+            margin-left: 0.8rem;
+            height: 20px;
+            width: 20px;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .checkbox.checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .checkbox.checked:after {
+            content: '✓';
+            color: white;
+            font-size: 14px;
+        }
+        
+        .item-text {
+            flex: 1;
+            font-size: 1rem;
+        }
+        
+        .delete-btn {
+            color: var(--danger-color);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        
+        .delete-btn:hover {
+            opacity: 1;
+        }
+        
+        .section-title {
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-left: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .tips {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .tips h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .tips p {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 0.8rem 0;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #6c757d;
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+        
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 0.2rem;
+        }
+        
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #6c757d;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+        
+        .empty-state p {
+            font-size: 0.9rem;
+        }
+
+        .category-select {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background-color: white;
+            font-size: 1rem;
+        }
+        
+        .priority {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        
+        .priority-btn {
+            flex: 1;
+            text-align: center;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            background-color: white;
+            cursor: pointer;
+        }
+        
+        .priority-btn:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+        
+        .priority-btn:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .priority-btn.selected {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .priority-high {
+            color: var(--danger-color);
+        }
+        
+        .priority-medium {
+            color: orange;
+        }
+        
+        .item .priority-indicator {
+            margin-left: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .filter-options {
+            display: flex;
+            margin-bottom: 1rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .filter-btn {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 0.4rem 0.8rem;
+            margin-left: 0.5rem;
+            white-space: nowrap;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        
+        .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* תפריט הגדרות */
+        .settings-container {
+            padding: 1rem;
+        }
+        
+        .settings-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .settings-item h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+        
+        /* סגנון לעמוד המקומות לביקור */
+        .place-card {
+            background-color: white;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .place-header {
+            display: flex;
+            padding: 0.8rem;
+            border-bottom: 1px solid #f0f0f0;
+            align-items: center;
+        }
+        
+        .place-icon {
+            font-size: 1.5rem;
+            margin-left: 0.8rem;
+            color: var(--primary-color);
+        }
+        
+        .place-title {
+            flex: 1;
+            font-weight: bold;
+        }
+        
+        .place-category {
+            font-size: 0.8rem;
+            background-color: #f0f2f5;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+        }
+        
+        .place-body {
+            padding: 0.8rem;
+        }
+        
+        .place-address {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 0.5rem;
+        }
+        
+        .place-notes {
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .place-actions {
+            display: flex;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .place-action {
+            flex: 1;
+            text-align: center;
+            padding: 0.5rem;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .place-action:not(:last-child) {
+            border-left: 1px solid #f0f0f0;
+        }
+        
+        /* סגנון ללו"ז היומי */
+        .day-selector {
+            display: flex;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .day-btn {
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 0.5rem 1rem;
+            margin-left: 0.5rem;
+            border-radius: 20px;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        
+        .day-btn.active {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+        
+        .add-day-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: white;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .schedule-day {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 1rem;
+        }
+        
+        .time-block {
+            display: flex;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        
+        .time-block:not(:last-child):before {
+            content: '';
+            position: absolute;
+            top: 2rem;
+            right: 0.85rem;
+            bottom: -0.5rem;
+            width: 2px;
+            background-color: #f0f0f0;
+        }
+        
+        .time-block-time {
+            width: 60px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            padding-top: 0.3rem;
+        }
+        
+        .time-block-dot {
+            width: 12px;
+            height: 12px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            margin: 0.5rem 0.5rem 0 0.8rem;
+        }
+        
+        .time-block-content {
+            flex: 1;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 0.8rem;
+            position: relative;
+        }
+        
+        #scheduleTime {
+            width: 80px;
+            padding: 0.8rem;
+            border: none;
+            outline: none;
+            background-color: #f8f9fa;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 360px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .tab {
+                padding: 0.6rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>הטיול שלי לבודפסט</h1>
+        <p><i class="fas fa-map-marker-alt"></i> המדריך האישי שלך</p>
+    </header>
+    
+    <div class="tabs">
+        <div class="tab active" data-tab="tasks">משימות</div>
+        <div class="tab" data-tab="shopping">קניות</div>
+        <div class="tab" data-tab="places">מקומות</div>
+        <div class="tab" data-tab="schedule">לו"ז</div>
+        <div class="tab" data-tab="info">מידע</div>
+    </div>
+    
+    <div class="tab-content active" id="tasks">
+        <div class="add-item">
+            <input type="text" id="taskInput" placeholder="הוסף משימה חדשה...">
+            <button id="addTaskBtn"><i class="fas fa-plus"></i></button>
+        </div>
+        
+        <div class="filter-options">
+            <div class="filter-btn active" data-filter="all">הכל</div>
+            <div class="filter-btn" data-filter="active">משימות פעילות</div>
+            <div class="filter-btn" data-filter="completed">משימות שהושלמו</div>
+            <div class="filter-btn" data-filter="high">עדיפות גבוהה</div>
+        </div>
+        
+        <div class="section-title">
+            <i class="fas fa-clipboard-list"></i>
+            <span>המשימות שלי</span>
+        </div>
+        
+        <div class="item-list" id="taskList">
+            <!-- משימות יתווספו כאן -->
+        </div>
+        
+        <div class="empty-state" id="emptyTasksState">
+            <i class="fas fa-tasks"></i>
+            <h3>אין משימות</h3>
+            <p>הוסף משימות לטיול שלך לבודפסט</p>
+        </div>
+    </div>
+    
+    <div class="tab-content" id="shopping">
+        <div class="add-item">
+            <input type="text" id="shoppingInput" placeholder="הוסף פריט לרשימת הקניות...">
+            <button id="addShoppingBtn"><i class="fas fa-plus"></i></button>
+        </div>
+        
+        <div class="section-title">
+            <i class="fas fa-shopping-cart"></i>
+            <span>רשימת הקניות שלי</span>
+        </div>
+        
+        <select class="category-select" id="categoryFilter">
+            <option value="all">כל הקטגוריות</option>
+            <option value="clothing">ביגוד</option>
+            <option value="electronics">אלקטרוניקה</option>
+            <option value="toiletries">טואלטיקה</option>
+            <option value="gifts">מתנות</option>
+            <option value="other">אחר</option>
+        </select>
+        
+        <div class="item-list" id="shoppingList">
+            <!-- פריטי קניות יתווספו כאן -->
+        </div>
+        
+        <div class="empty-state" id="emptyShoppingState">
+            <i class="fas fa-shopping-bag"></i>
+            <h3>אין פריטים ברשימת הקניות</h3>
+            <p>הוסף פריטים שברצונך לקנות בבודפסט</p>
+        </div>
+    </div>
+    
+    <div class="tab-content" id="places">
+        <div class="add-item">
+            <input type="text" id="placeInput" placeholder="הוסף מקום לביקור...">
+            <button id="addPlaceBtn"><i class="fas fa-plus"></i></button>
+        </div>
+        
+        <div class="section-title">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>מקומות לביקור</span>
+        </div>
+        
+        <select class="category-select" id="placeFilter">
+            <option value="all">כל הקטגוריות</option>
+            <option value="attraction">אטרקציות</option>
+            <option value="museum">מוזיאונים</option>
+            <option value="food">מסעדות וקולינריה</option>
+            <option value="nature">טבע ופארקים</option>
+            <option value="other">אחר</option>
+        </select>
+        
+        <div class="item-list" id="placeList">
+            <!-- מקומות לביקור יתווספו כאן -->
+        </div>
+        
+        <div class="empty-state" id="emptyPlacesState">
+            <i class="fas fa-map-marker-alt"></i>
+            <h3>אין מקומות לביקור</h3>
+            <p>הוסף מקומות שתרצה לבקר בהם בבודפסט</p>
+        </div>
+    </div>
+    
+    <div class="tab-content" id="schedule">
+        <div class="section-title">
+            <i class="fas fa-calendar-day"></i>
+            <span>לו"ז יומי</span>
+        </div>
+        
+        <div class="schedule-container">
+            <div class="day-selector">
+                <button class="day-btn" data-day="1">יום 1</button>
+                <button class="day-btn" data-day="2">יום 2</button>
+                <button class="day-btn" data-day="3">יום 3</button>
+                <button class="day-btn active" data-day="4">יום 4</button>
+                <button class="day-btn" data-day="5">יום 5</button>
+                <button class="add-day-btn"><i class="fas fa-plus"></i></button>
+            </div>
+            
+            <div class="schedule-day" id="scheduleContent">
+                <div class="add-item">
+                    <input type="text" id="scheduleInput" placeholder="הוסף פעילות ללו״ז...">
+                    <input type="time" id="scheduleTime" value="09:00">
+                    <button id="addScheduleBtn"><i class="fas fa-plus"></i></button>
+                </div>
+                
+                <div class="item-list" id="scheduleList">
+                    <!-- פעילויות יומיות יתווספו כאן -->
+                </div>
+                
+                <div class="empty-state" id="emptyScheduleState">
+                    <i class="fas fa-calendar-day"></i>
+                    <h3>אין פעילויות לו"ז</h3>
+                    <p>הוסף פעילויות ללו"ז היומי שלך</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="tab-content" id="info">
+        <div class="tips">
+            <h3>טיפים לטיול בבודפסט</h3>
+            <p><i class="fas fa-money-bill-wave"></i> המטבע המקומי: פורינט הונגרי (HUF)</p>
+            <p><i class="fas fa-language"></i> שפה: הונגרית, אך רבים מדברים אנגלית בתיירות</p>
+            <p><i class="fas fa-subway"></i> תחבורה: מטרו, חשמלית ואוטובוסים זמינים</p>
+            <p><i class="fas fa-phone"></i> חיוג: קידומת +36</p>
+        </div>
+        
+        <div class="tips">
+            <h3>מקומות מומלצים</h3>
+            <p><i class="fas fa-landmark"></i> גבעת המצודה ובית המחוקקים</p>
+            <p><i class="fas fa-hot-tub"></i> מרחצאות תרמיים (Széchenyi, Gellért)</p>
+            <p><i class="fas fa-store"></i> שוק מרכזי (Great Market Hall)</p>
+            <p><i class="fas fa-building"></i> רובע היהודי ובתי הקפה</p>
+            <p><i class="fas fa-water"></i> שייט על הדנובה</p>
+        </div>
+        
+        <div class="tips">
+            <h3>מספרי חירום</h3>
+            <p><i class="fas fa-ambulance"></i> חירום כללי: 112</p>
+            <p><i class="fas fa-passport"></i> שגרירות ישראל: +36-1-392-6200</p>
+        </div>
+    </div>
+    
+    <div class="nav-bar">
+        <a class="nav-item active" data-tab="tasks">
+            <i class="fas fa-tasks"></i>
+            <span>משימות</span>
+        </a>
+        <a class="nav-item" data-tab="shopping">
+            <i class="fas fa-shopping-cart"></i>
+            <span>קניות</span>
+        </a>
+        <a class="nav-item" data-tab="places">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>מקומות</span>
+        </a>
+        <a class="nav-item" data-tab="schedule">
+            <i class="fas fa-calendar-alt"></i>
+            <span>לו"ז</span>
+        </a>
+        <a class="nav-item" data-tab="info">
+            <i class="fas fa-info-circle"></i>
+            <span>מידע</span>
+        </a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // מחלקה לניהול הנתונים עם localStorage
+            class DataManager {
+                constructor(storageKey) {
+                    this.storageKey = storageKey;
+                    this.data = this.loadData();
+                }
+                
+                loadData() {
+                    try {
+                        const savedData = localStorage.getItem(this.storageKey);
+                        return savedData ? JSON.parse(savedData) : [];
+                    } catch (e) {
+                        console.log('שגיאה בטעינת נתונים: ', e);
+                        return [];
+                    }
+                }
+                
+                saveData() {
+                    try {
+                        localStorage.setItem(this.storageKey, JSON.stringify(this.data));
+                    } catch (e) {
+                        console.log('שגיאה בשמירת נתונים: ', e);
+                    }
+                }
+                
+                addItem(item) {
+                    this.data.push(item);
+                    this.saveData();
+                }
+                
+                deleteItem(id) {
+                    this.data = this.data.filter(item => item.id !== id);
+                    this.saveData();
+                }
+                
+                toggleComplete(id) {
+                    const item = this.data.find(item => item.id === id);
+                    if (item) {
+                        item.completed = !item.completed;
+                        this.saveData();
+                    }
+                }
+                
+                updateItem(id, updates) {
+                    const item = this.data.find(item => item.id === id);
+                    if (item) {
+                        Object.assign(item, updates);
+                        this.saveData();
+                    }
+                }
+                
+                getAllItems() {
+                    return this.data;
+                }
+                
+                getFilteredItems(filterType, filterValue) {
+                    if (filterType === 'all') return this.data;
+                    return this.data.filter(item => item[filterType] === filterValue);
+                }
+            }
+            
+            // ניהול משימות
+            const taskManager = new DataManager('budapestTasks');
+            const shoppingManager = new DataManager('budapestShopping');
+            
+            // התייחסות לאלמנטים בדף
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            const taskInput = document.getElementById('taskInput');
+            const addTaskBtn = document.getElementById('addTaskBtn');
+            const taskList = document.getElementById('taskList');
+            const emptyTasksState = document.getElementById('emptyTasksState');
+            
+            const shoppingInput = document.getElementById('shoppingInput');
+            const addShoppingBtn = document.getElementById('addShoppingBtn');
+            const shoppingList = document.getElementById('shoppingList');
+            const emptyShoppingState = document.getElementById('emptyShoppingState');
+            const categoryFilter = document.getElementById('categoryFilter');
+            
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            let activeFilter = 'all';
+            
+            // מעבר בין לשוניות
+            function switchTab(tabId) {
+                tabs.forEach(tab => {
+                    tab.classList.toggle('active', tab.dataset.tab === tabId);
+                });
+                
+                tabContents.forEach(content => {
+                    content.classList.toggle('active', content.id === tabId);
+                });
+                
+                navItems.forEach(item => {
+                    item.classList.toggle('active', item.dataset.tab === tabId);
+                });
+            }
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+            });
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', () => switchTab(item.dataset.tab));
+            });
+            
+            // פונקציות למשימות
+            function addTask() {
+                const taskText = taskInput.value.trim();
+                if (taskText) {
+                    const newTask = {
+                        id: Date.now().toString(),
+                        text: taskText,
+                        completed: false,
+                        priority: 'medium',
+                        date: new Date().toISOString()
+                    };
+                    
+                    taskManager.addItem(newTask);
+                    renderTasks();
+                    taskInput.value = '';
+                }
+            }
+            
+            function renderTasks() {
+                const tasks = taskManager.getFilteredItems(
+                    activeFilter === 'active' ? 'completed' : 
+                    activeFilter === 'completed' ? 'completed' : 
+                    activeFilter === 'high' ? 'priority' : 'all',
+                    activeFilter === 'active' ? false : 
+                    activeFilter === 'completed' ? true : 
+                    activeFilter === 'high' ? 'high' : null
+                );
+                
+                if (tasks.length === 0) {
+                    taskList.style.display = 'none';
+                    emptyTasksState.style.display = 'block';
+                } else {
+                    taskList.style.display = 'block';
+                    emptyTasksState.style.display = 'none';
+                    
+                    taskList.innerHTML = '';
+                    tasks.forEach(task => {
+                        const itemEl = document.createElement('div');
+                        itemEl.className = `item ${task.completed ? 'completed' : ''}`;
+                        
+                        const priorityIcon = task.priority === 'high' ? '<i class="fas fa-exclamation-circle priority-high"></i>' :
+                                            task.priority === 'medium' ? '<i class="fas fa-circle priority-medium"></i>' : '';
+                        
+                        itemEl.innerHTML = `
+                            <div class="checkbox ${task.completed ? 'checked' : ''}"></div>
+                            <div class="item-text">${task.text} ${priorityIcon}</div>
+                            <button class="delete-btn"><i class="fas fa-trash-alt"></i></button>
+                        `;
+                        
+                        const checkbox = itemEl.querySelector('.checkbox');
+                        checkbox.addEventListener('click', () => {
+                            taskManager.toggleComplete(task.id);
+                            renderTasks();
+                        });
+                        
+                        const deleteBtn = itemEl.querySelector('.delete-btn');
+                        deleteBtn.addEventListener('click', () => {
+                            taskManager.deleteItem(task.id);
+                            renderTasks();
+                        });
+                        
+                        // מאפשר לשנות סדר עדיפויות בלחיצה ארוכה
+                        itemEl.addEventListener('contextmenu', (e) => {
+                            e.preventDefault();
+                            const priorities = ['low', 'medium', 'high'];
+                            const currentIndex = priorities.indexOf(task.priority);
+                            const nextIndex = (currentIndex + 1) % priorities.length;
+                            
+                            taskManager.updateItem(task.id, { priority: priorities[nextIndex] });
+                            renderTasks();
+                        });
+                        
+                        taskList.appendChild(itemEl);
+                    });
+                }
+            }
+            
+            // פונקציות לרשימת קניות
+            function addShoppingItem() {
+                const itemText = shoppingInput.value.trim();
+                if (itemText) {
+                    const newItem = {
+                        id: Date.now().toString(),
+                        text: itemText,
+                        completed: false,
+                        category: 'other'
+                    };
+                    
+                    shoppingManager.addItem(newItem);
+                    renderShoppingList();
+                    shoppingInput.value = '';
+                }
+            }
+            
+            function renderShoppingList() {
+                const selectedCategory = categoryFilter.value;
+                const items = selectedCategory === 'all' ? 
+                              shoppingManager.getAllItems() : 
+                              shoppingManager.getFilteredItems('category', selectedCategory);
+                
+                if (items.length === 0) {
+                    shoppingList.style.display = 'none';
+                    emptyShoppingState.style.display = 'block';
+                } else {
+                    shoppingList.style.display = 'block';
+                    emptyShoppingState.style.display = 'none';
+                    
+                    shoppingList.innerHTML = '';
+                    items.forEach(item => {
+                        const itemEl = document.createElement('div');
+                        itemEl.className = `item ${item.completed ? 'completed' : ''}`;
+                        
+                        const categoryIcon = 
+                            item.category === 'clothing' ? '<i class="fas fa-tshirt"></i>' :
+                            item.category === 'electronics' ? '<i class="fas fa-mobile-alt"></i>' :
+                            item.category === 'toiletries' ? '<i class="fas fa-pump-soap"></i>' :
+                            item.category === 'gifts' ? '<i class="fas fa-gift"></i>' :
+                            '<i class="fas fa-shopping-bag"></i>';
+                        
+                        itemEl.innerHTML = `
+                            <div class="checkbox ${item.completed ? 'checked' : ''}"></div>
+                            <div class="item-text">${item.text} ${categoryIcon}</div>
+                            <button class="delete-btn"><i class="fas fa-trash-alt"></i></button>
+                        `;
+                        
+                        const checkbox = itemEl.querySelector('.checkbox');
+                        checkbox.addEventListener('click', () => {
+                            shoppingManager.toggleComplete(item.id);
+                            renderShoppingList();
+                        });
+                        
+                        const deleteBtn = itemEl.querySelector('.delete-btn');
+                        deleteBtn.addEventListener('click', () => {
+                            shoppingManager.deleteItem(item.id);
+                            renderShoppingList();
+                        });
+                        
+                        // שינוי קטגוריה בלחיצה ארוכה
+                        itemEl.addEventListener('contextmenu', (e) => {
+                            e.preventDefault();
+                            const categories = ['clothing', 'electronics', 'toiletries', 'gifts', 'other'];
+                            const currentIndex = categories.indexOf(item.category);
+                            const nextIndex = (currentIndex + 1) % categories.length;
+                            
+                            shoppingManager.updateItem(item.id, { category: categories[nextIndex] });
+                            renderShoppingList();
+                        });
+                        
+                        shoppingList.appendChild(itemEl);
+                    });
+                }
+            }
+            
+            // אירועי לחיצה
+            addTaskBtn.addEventListener('click', addTask);
+            taskInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') addTask();
+            });
+            
+            addShoppingBtn.addEventListener('click', addShoppingItem);
+            shoppingInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') addShoppingItem();
+            });
+            
+            categoryFilter.addEventListener('change', renderShoppingList);
+            
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    activeFilter = btn.dataset.filter;
+                    renderTasks();
+                });
+            });
+            
+            // הוספת משימות דוגמה אם אין משימות
+            if (taskManager.getAllItems().length === 0) {
+                const sampleTasks = [
+                    { id: '1', text: 'לבקר במרחצאות סצ׳ני', completed: false, priority: 'high', date: new Date().toISOString() },
+                    { id: '2', text: 'סיור בגבעת המצודה', completed: false, priority: 'medium', date: new Date().toISOString() },
+                    { id: '3', text: 'שייט על הדנובה', completed: false, priority: 'medium', date: new Date().toISOString() }
+                ];
+                
+                sampleTasks.forEach(task => taskManager.addItem(task));
+            }
+            
+            // הוספת פריטי קניות דוגמה אם אין פריטים
+            if (shoppingManager.getAllItems().length === 0) {
+                const sampleItems = [
+                    { id: '1', text: 'מגנטים למקרר', completed: false, category: 'gifts' },
+                    { id: '2', text: 'פפריקה הונגרית', completed: false, category: 'gifts' },
+                    { id: '3', text: 'מתאם חשמל', completed: false, category: 'electronics' }
+                ];
+                
+                sampleItems.forEach(item => shoppingManager.addItem(item));
+            }
+            
+            // מחלקות ניהול נוספות
+            const placeManager = new DataManager('budapestPlaces');
+            const scheduleManager = new DataManager('budapestSchedule');
+            
+            // התייחסות לאלמנטים נוספים בדף
+            const placeInput = document.getElementById('placeInput');
+            const addPlaceBtn = document.getElementById('addPlaceBtn');
+            const placeList = document.getElementById('placeList');
+            const emptyPlacesState = document.getElementById('emptyPlacesState');
+            const placeFilter = document.getElementById('placeFilter');
+            
+            const scheduleInput = document.getElementById('scheduleInput');
+            const scheduleTime = document.getElementById('scheduleTime');
+            const addScheduleBtn = document.getElementById('addScheduleBtn');
+            const scheduleList = document.getElementById('scheduleList');
+            const emptyScheduleState = document.getElementById('emptyScheduleState');
+            const dayButtons = document.querySelectorAll('.day-btn');
+            const addDayBtn = document.querySelector('.add-day-btn');
+            
+            let activeDay = '4'; // יום ברירת מחדל
+            
+            // פונקציות למקומות ביקור
+            function addPlace() {
+                const placeText = placeInput.value.trim();
+                if (placeText) {
+                    const newPlace = {
+                        id: Date.now().toString(),
+                        name: placeText,
+                        visited: false,
+                        category: 'attraction',
+                        address: '',
+                        notes: ''
+                    };
+                    
+                    placeManager.addItem(newPlace);
+                    renderPlaces();
+                    placeInput.value = '';
+                }
+            }
+            
+            function renderPlaces() {
+                const selectedCategory = placeFilter.value;
+                const places = selectedCategory === 'all' ? 
+                               placeManager.getAllItems() : 
+                               placeManager.getFilteredItems('category', selectedCategory);
+                
+                if (places.length === 0) {
+                    placeList.style.display = 'none';
+                    emptyPlacesState.style.display = 'block';
+                } else {
+                    placeList.style.display = 'block';
+                    emptyPlacesState.style.display = 'none';
+                    
+                    placeList.innerHTML = '';
+                    places.forEach(place => {
+                        // בחירת האייקון המתאים לקטגוריה
+                        const categoryIcon = 
+                            place.category === 'attraction' ? '<i class="fas fa-monument"></i>' :
+                            place.category === 'museum' ? '<i class="fas fa-university"></i>' :
+                            place.category === 'food' ? '<i class="fas fa-utensils"></i>' :
+                            place.category === 'nature' ? '<i class="fas fa-tree"></i>' :
+                            '<i class="fas fa-map-marker-alt"></i>';
+                        
+                        // תווית הקטגוריה
+                        const categoryLabel = 
+                            place.category === 'attraction' ? 'אטרקציה' :
+                            place.category === 'museum' ? 'מוזיאון' :
+                            place.category === 'food' ? 'אוכל' :
+                            place.category === 'nature' ? 'טבע' :
+                            'אחר';
+                        
+                        const placeCard = document.createElement('div');
+                        placeCard.className = 'place-card';
+                        placeCard.innerHTML = `
+                            <div class="place-header">
+                                <div class="place-icon">${categoryIcon}</div>
+                                <div class="place-title">${place.name}</div>
+                                <div class="place-category">${categoryLabel}</div>
+                            </div>
+                            <div class="place-body">
+                                <div class="place-address">${place.address || 'לא הוזנה כתובת'}</div>
+                                <div class="place-notes">${place.notes || ''}</div>
+                            </div>
+                            <div class="place-actions">
+                                <div class="place-action visit-action" data-id="${place.id}">
+                                    <i class="fas ${place.visited ? 'fa-check-circle' : 'fa-circle'}"></i>
+                                    ${place.visited ? 'ביקרתי' : 'לסמן כביקור'}
+                                </div>
+                                <div class="place-action edit-action" data-id="${place.id}">
+                                    <i class="fas fa-edit"></i>
+                                    ערוך
+                                </div>
+                                <div class="place-action delete-action" data-id="${place.id}">
+                                    <i class="fas fa-trash-alt"></i>
+                                    מחק
+                                </div>
+                            </div>
+                        `;
+                        
+                        // הוספת אירועי לחיצה על הכפתורים
+                        const visitAction = placeCard.querySelector('.visit-action');
+                        visitAction.addEventListener('click', () => {
+                            placeManager.updateItem(place.id, { visited: !place.visited });
+                            renderPlaces();
+                        });
+                        
+                        const editAction = placeCard.querySelector('.edit-action');
+                        editAction.addEventListener('click', () => {
+                            // כאן אפשר להוסיף פונקציונליות של עריכה בהמשך
+                            const newNotes = prompt('הערות:', place.notes);
+                            if (newNotes !== null) {
+                                placeManager.updateItem(place.id, { notes: newNotes });
+                                renderPlaces();
+                            }
+                        });
+                        
+                        const deleteAction = placeCard.querySelector('.delete-action');
+                        deleteAction.addEventListener('click', () => {
+                            if (confirm('האם אתה בטוח שברצונך למחוק את המקום?')) {
+                                placeManager.deleteItem(place.id);
+                                renderPlaces();
+                            }
+                        });
+                        
+                        placeList.appendChild(placeCard);
+                    });
+                }
+            }
+            
+            // פונקציות ללו"ז היומי
+            function addScheduleItem() {
+                const activityText = scheduleInput.value.trim();
+                const activityTime = scheduleTime.value;
+                
+                if (activityText && activityTime) {
+                    const newActivity = {
+                        id: Date.now().toString(),
+                        text: activityText,
+                        time: activityTime,
+                        day: activeDay,
+                        completed: false
+                    };
+                    
+                    scheduleManager.addItem(newActivity);
+                    renderSchedule();
+                    scheduleInput.value = '';
+                }
+            }
+            
+            function renderSchedule() {
+                // סינון לפי היום הפעיל
+                const activities = scheduleManager.getFilteredItems('day', activeDay);
+                
+                // מיון לפי זמן
+                activities.sort((a, b) => {
+                    return a.time.localeCompare(b.time);
+                });
+                
+                if (activities.length === 0) {
+                    scheduleList.style.display = 'none';
+                    emptyScheduleState.style.display = 'block';
+                } else {
+                    scheduleList.style.display = 'block';
+                    emptyScheduleState.style.display = 'none';
+                    
+                    scheduleList.innerHTML = '';
+                    activities.forEach(activity => {
+                        const timeBlock = document.createElement('div');
+                        timeBlock.className = 'time-block';
+                        
+                        timeBlock.innerHTML = `
+                            <div class="time-block-time">${activity.time}</div>
+                            <div class="time-block-dot"></div>
+                            <div class="time-block-content">
+                                <div class="item-text">${activity.text}</div>
+                                <button class="delete-btn"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        `;
+                        
+                        const deleteBtn = timeBlock.querySelector('.delete-btn');
+                        deleteBtn.addEventListener('click', () => {
+                            scheduleManager.deleteItem(activity.id);
+                            renderSchedule();
+                        });
+                        
+                        scheduleList.appendChild(timeBlock);
+                    });
+                }
+            }
+            
+            // החלפת יום פעיל
+            dayButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    dayButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    activeDay = btn.dataset.day;
+                    renderSchedule();
+                });
+            });
+            
+            // הוספת יום חדש
+            addDayBtn.addEventListener('click', () => {
+                const dayCount = dayButtons.length;
+                const newDayNum = dayCount + 1;
+                
+                const newDayBtn = document.createElement('button');
+                newDayBtn.className = 'day-btn';
+                newDayBtn.dataset.day = newDayNum.toString();
+                newDayBtn.textContent = `יום ${newDayNum}`;
+                
+                newDayBtn.addEventListener('click', () => {
+                    dayButtons.forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+                    newDayBtn.classList.add('active');
+                    activeDay = newDayNum.toString();
+                    renderSchedule();
+                });
+                
+                addDayBtn.parentNode.insertBefore(newDayBtn, addDayBtn);
+            });
+            
+            // אירועי לחיצה למקומות ביקור
+            addPlaceBtn.addEventListener('click', addPlace);
+            placeInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') addPlace();
+            });
+            
+            placeFilter.addEventListener('change', renderPlaces);
+            
+            // אירועי לחיצה ללו"ז
+            addScheduleBtn.addEventListener('click', addScheduleItem);
+            scheduleInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') addScheduleItem();
+            });
+            
+            // הוספת מקומות ביקור לדוגמה אם אין מקומות
+            if (placeManager.getAllItems().length === 0) {
+                const samplePlaces = [
+                    { 
+                        id: '1', 
+                        name: 'גשר השלשלאות', 
+                        visited: false, 
+                        category: 'attraction',
+                        address: 'Széchenyi Lánchíd, בודפשט',
+                        notes: 'גשר השלשלאות הוא אחד מסמליה של בודפשט, חובה לראות בלילה עם התאורה'
+                    },
+                    { 
+                        id: '2', 
+                        name: 'בית המחוקקים', 
+                        visited: false, 
+                        category: 'attraction',
+                        address: 'Kossuth Lajos tér 1-3, בודפשט',
+                        notes: 'מומלץ לקחת סיור מודרך בתוך בניין הפרלמנט, צריך להזמין מראש'
+                    },
+                    { 
+                        id: '3', 
+                        name: 'מרחצאות סצ׳ני', 
+                        visited: false, 
+                        category: 'attraction',
+                        address: 'Állatkerti krt. 9-11, בודפשט',
+                        notes: 'להביא בגד ים ומגבת, ניתן לשכור ארונית'
+                    }
+                ];
+                
+                samplePlaces.forEach(place => placeManager.addItem(place));
+            }
+            
+            // הוספת פעילויות לו"ז לדוגמה אם אין פעילויות
+            if (scheduleManager.getAllItems().length === 0) {
+                const sampleActivities = [
+                    { id: '1', text: 'ארוחת בוקר במלון', time: '08:00', day: '4', completed: false },
+                    { id: '2', text: 'ביקור בבית המחוקקים', time: '10:30', day: '4', completed: false },
+                    { id: '3', text: 'ארוחת צהריים', time: '13:00', day: '4', completed: false },
+                    { id: '4', text: 'מרחצאות תרמיים סצ׳ני', time: '15:00', day: '4', completed: false },
+                    { id: '5', text: 'שייט ערב על הדנובה', time: '19:30', day: '4', completed: false }
+                ];
+                
+                sampleActivities.forEach(activity => scheduleManager.addItem(activity));
+            }
+            
+            // רנדור התצוגה הראשונית
+            renderTasks();
+            renderShoppingList();
+            renderPlaces();
+            renderSchedule();
+        });
+    </script>
+</body>
+</html>
