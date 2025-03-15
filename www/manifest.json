@@ -1,7 +1,7 @@
 {
-  "name": "הטיול שלי לבודפסט",
+  "name": "הטיול שלי",
   "short_name": "הטיול שלי",
-  "description": "אפליקציה לניהול הטיול שלך לבודפסט",
+  "description": "אפליקציה לניהול הטיול שלך",
   "start_url": "/",
   "display": "standalone",
   "icons": [

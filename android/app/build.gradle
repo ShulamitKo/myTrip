@@ -4,7 +4,7 @@ android {
     namespace "com.mytrip.budapest"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.mytrip.budapest"
+        applicationId "com.mytrip"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

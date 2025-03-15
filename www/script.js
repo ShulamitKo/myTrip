@@ -895,108 +895,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // הוספת נתוני דוגמה
-    if (taskManager.getAllItems().length === 0) {
-        const sampleTasks = [
-            { id: '1', text: 'לבקר במרחצאות סצ׳ני', completed: false, priority: 'high', date: new Date().toISOString() },
-            { id: '2', text: 'סיור בגבעת המצודה', completed: false, priority: 'medium', date: new Date().toISOString() },
-            { id: '3', text: 'שייט על הדנובה', completed: false, priority: 'medium', date: new Date().toISOString() }
-        ];
-        
-        sampleTasks.forEach(task => taskManager.addItem(task));
-    }
-    
-    if (shoppingManager.getAllItems().length === 0) {
-        const sampleItems = [
-            { id: '1', text: 'מגנטים למקרר', completed: false, category: 'gifts' },
-            { id: '2', text: 'פפריקה הונגרית', completed: false, category: 'gifts' },
-            { id: '3', text: 'מתאם חשמל', completed: false, category: 'electronics' }
-        ];
-        
-        sampleItems.forEach(item => shoppingManager.addItem(item));
-    }
-    
-    if (placeManager.getAllItems().length === 0) {
-        const samplePlaces = [
-            { 
-                id: '1', 
-                name: 'גשר השלשלאות', 
-                visited: false, 
-                category: 'attraction',
-                address: 'Széchenyi Lánchíd, בודפשט',
-                notes: 'גשר השלשלאות הוא אחד מסמליה של בודפשט, חובה לראות בלילה עם התאורה',
-                priority: 'high'
-            },
-            { 
-                id: '2', 
-                name: 'בית המחוקקים', 
-                visited: false, 
-                category: 'museum',
-                address: 'Kossuth Lajos tér 1-3, בודפשט',
-                notes: 'מומלץ לקחת סיור מודרך בתוך בניין הפרלמנט, צריך להזמין מראש',
-                priority: 'medium'
-            },
-            { 
-                id: '3', 
-                name: 'מרחצאות סצ׳ני', 
-                visited: false, 
-                category: 'attraction',
-                address: 'Állatkerti krt. 9-11, בודפשט',
-                notes: 'להביא בגד ים ומגבת, ניתן לשכור ארונית',
-                priority: 'high'
-            }
-        ];
-        
-        samplePlaces.forEach(place => placeManager.addItem(place));
-    }
-    
-    if (scheduleManager.getAllItems().length === 0) {
-        const sampleActivities = [
-            { id: '1', text: 'ארוחת בוקר במלון', time: '08:00', day: '4', completed: false },
-            { id: '2', text: 'ביקור בבית המחוקקים', time: '10:30', day: '4', completed: false },
-            { id: '3', text: 'ארוחת צהריים', time: '13:00', day: '4', completed: false },
-            { id: '4', text: 'מרחצאות תרמיים סצ׳ני', time: '15:00', day: '4', completed: false },
-            { id: '5', text: 'שייט ערב על הדנובה', time: '19:30', day: '4', completed: false }
-        ];
-        
-        sampleActivities.forEach(activity => scheduleManager.addItem(activity));
-    }
-    
-    if (foodManager.getAllItems().length === 0) {
-        const sampleFoods = [
-            { 
-                id: '1', 
-                name: 'New York Café', 
-                visited: false, 
-                category: 'cafe',
-                address: 'Erzsébet krt. 9-11, בודפשט',
-                notes: 'בית הקפה היפה בעולם, מומלץ להזמין מקום מראש',
-                price: 'expensive',
-                rating: 5
-            },
-            { 
-                id: '2', 
-                name: 'Gettó Rooster', 
-                visited: false, 
-                category: 'restaurant',
-                address: 'Dob u. 16, בודפשט',
-                notes: 'מסעדה יהודית מודרנית ברובע היהודי',
-                price: 'medium',
-                rating: 4
-            },
-            { 
-                id: '3', 
-                name: 'Langos Stand', 
-                visited: false, 
-                category: 'fastfood',
-                address: 'שוק מרכזי, בודפשט',
-                notes: 'לנגוש הונגרי מסורתי, חובה לטעום',
-                price: 'cheap',
-                rating: 4
-            }
-        ];
-        
-        sampleFoods.forEach(food => foodManager.addItem(food));
-    }
+   
     
     // עדכון הטופס של עריכת מסעדה
     document.getElementById('edit-food-form').addEventListener('submit', function(e) {
@@ -1473,4 +1372,179 @@ document.addEventListener('DOMContentLoaded', function() {
         
         addDayBtn.parentNode.insertBefore(newDayBtn, addDayBtn);
     });
+
+    // ===== פונקציות הגדרות =====
+
+    // יבוא ויצוא נתונים
+    function setupSettingsHandlers() {
+        const settingsBtn = document.getElementById('settingsBtn');
+        const settingsModal = document.getElementById('settings-modal');
+        const closeBtn = settingsModal.querySelector('.close-btn');
+        const exportDataBtn = document.getElementById('exportDataBtn');
+        const importDataBtn = document.getElementById('importDataBtn');
+        const importFileInput = document.getElementById('importFileInput');
+        const resetAppBtn = document.getElementById('resetAppBtn');
+        
+        // פתיחת מודל ההגדרות
+        if (settingsBtn) {
+            settingsBtn.addEventListener('click', () => {
+                settingsModal.classList.add('show');
+            });
+        }
+        
+        // סגירת מודל ההגדרות
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                settingsModal.classList.remove('show');
+            });
+        }
+        
+        // סגירת המודל בלחיצה מחוץ לתוכן
+        window.addEventListener('click', (e) => {
+            if (e.target === settingsModal) {
+                settingsModal.classList.remove('show');
+            }
+        });
+        
+        if (exportDataBtn) {
+            exportDataBtn.addEventListener('click', exportData);
+        }
+        
+        if (importDataBtn) {
+            importDataBtn.addEventListener('click', () => {
+                importFileInput.click();
+            });
+        }
+        
+        if (importFileInput) {
+            importFileInput.addEventListener('change', importData);
+        }
+        
+        if (resetAppBtn) {
+            resetAppBtn.addEventListener('click', resetApp);
+        }
+    }
+
+    // ייצוא כל הנתונים לקובץ JSON
+    function exportData() {
+        // איסוף כל הנתונים מה-localStorage
+        const data = {};
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            try {
+                data[key] = JSON.parse(localStorage.getItem(key));
+            } catch (e) {
+                data[key] = localStorage.getItem(key);
+            }
+        }
+        
+        // יצירת קובץ JSON להורדה
+        const dataStr = JSON.stringify(data, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(dataBlob);
+        
+        // יצירת קישור להורדה והפעלתו
+        const a = document.createElement('a');
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        a.download = `mytrip-backup-${timestamp}.json`;
+        a.href = url;
+        a.click();
+        
+        // שחרור משאבים
+        setTimeout(() => {
+            URL.revokeObjectURL(url);
+        }, 100);
+        
+        showToast('הנתונים יוצאו בהצלחה!');
+    }
+
+    // ייבוא נתונים מקובץ JSON
+    function importData(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                
+                // אישור מהמשתמש
+                if (confirm('פעולה זו תחליף את כל הנתונים הקיימים. האם להמשיך?')) {
+                    // שמירת הנתונים ב-localStorage
+                    for (const key in data) {
+                        if (typeof data[key] === 'object') {
+                            localStorage.setItem(key, JSON.stringify(data[key]));
+                        } else {
+                            localStorage.setItem(key, data[key]);
+                        }
+                    }
+                    
+                    showToast('הנתונים יובאו בהצלחה! מרענן את העמוד...');
+                    
+                    // רענון העמוד כדי לטעון את הנתונים החדשים
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                }
+            } catch (error) {
+                console.error('שגיאה בייבוא נתונים:', error);
+                showToast('שגיאה בייבוא הנתונים. אנא ודא שהקובץ תקין.', 'error');
+            }
+        };
+        
+        reader.readAsText(file);
+        
+        // איפוס שדה הקובץ כדי לאפשר בחירה חוזרת של אותו קובץ
+        event.target.value = '';
+    }
+
+    // איפוס כל הנתונים באפליקציה
+    function resetApp() {
+        if (confirm('האם אתה בטוח שברצונך למחוק את כל הנתונים? פעולה זו אינה ניתנת לביטול!')) {
+            if (confirm('אזהרה אחרונה: כל הנתונים יימחקו לצמיתות. האם להמשיך?')) {
+                // גיבוי אוטומטי לפני מחיקה
+                exportData();
+                
+                // מחיקת כל הנתונים מ-localStorage
+                localStorage.clear();
+                
+                showToast('כל הנתונים נמחקו. מרענן את העמוד...');
+                
+                // רענון העמוד
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            }
+        }
+    }
+
+    // הצגת הודעה למשתמש
+    function showToast(message, type = 'success') {
+        // בדיקה אם יש כבר אלמנט toast
+        let toast = document.querySelector('.toast');
+        
+        // אם אין, יוצרים אחד חדש
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.className = 'toast';
+            document.body.appendChild(toast);
+        }
+        
+        // הגדרת סוג ההודעה
+        toast.className = `toast ${type}`;
+        
+        // הגדרת תוכן ההודעה
+        toast.textContent = message;
+        
+        // הצגת ההודעה
+        toast.classList.add('show');
+        
+        // הסרת ההודעה אחרי 3 שניות
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
+    // אתחול הגדרות
+    setupSettingsHandlers();
 }); 

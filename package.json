@@ -1,7 +1,7 @@
 {
   "name": "mytrip",
   "version": "1.0.0",
-  "description": "אפליקציה לניהול הטיול שלי לבודפסט",
+  "description": "אפליקציה לניהול הטיול שלי",
   "main": "index.js",
   "scripts": {
     "start": "npx serve www",

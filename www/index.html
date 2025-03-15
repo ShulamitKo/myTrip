@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>הטיול שלי לבודפסט</title>
+    <title>הטיול שלי</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4a6da7">
@@ -15,12 +15,15 @@
     <header>
         <div class="header-content">
             <div class="title-container">
-                <h1 id="appTitle">הטיול שלי לבודפסט</h1>
                 <button class="edit-title-btn" onclick="editTitle()">
                     <i class="fas fa-edit"></i>
                 </button>
+                <h1 id="appTitle">הטיול שלי</h1>
             </div>
             <p><i class="fas fa-map-marker-alt"></i> המדריך האישי שלך</p>
+            <button id="settingsBtn" class="settings-btn">
+                <i class="fas fa-cog"></i>
+            </button>
         </div>
     </header>
     
@@ -469,6 +472,44 @@
                         <button type="button" class="btn close-modal">ביטול</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- מודל הגדרות -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>הגדרות</h3>
+            
+            <div class="settings-container">
+                <div class="settings-item">
+                    <h3>גיבוי ושחזור נתונים</h3>
+                    <p>ייצא את כל הנתונים שלך לקובץ או ייבא נתונים מקובץ קיים.</p>
+                    <div class="settings-actions">
+                        <button id="exportDataBtn" class="btn primary-btn">
+                            <i class="fas fa-file-export"></i> ייצוא נתונים
+                        </button>
+                        <button id="importDataBtn" class="btn secondary-btn">
+                            <i class="fas fa-file-import"></i> ייבוא נתונים
+                        </button>
+                        <input type="file" id="importFileInput" style="display: none;" accept=".json">
+                    </div>
+                </div>
+                
+                <div class="settings-item">
+                    <h3>מחיקת נתונים</h3>
+                    <p>מחק את כל הנתונים ואפס את האפליקציה. פעולה זו אינה ניתנת לביטול!</p>
+                    <button id="resetAppBtn" class="btn danger-btn">
+                        <i class="fas fa-trash-alt"></i> מחק את כל הנתונים
+                    </button>
+                </div>
+                
+                <div class="settings-item">
+                    <h3>אודות</h3>
+                    <p>הטיול שלי - גרסה 1.0.0</p>
+                    <p>אפליקציה לניהול הטיול שלך</p>
+                </div>
             </div>
         </div>
     </div>
