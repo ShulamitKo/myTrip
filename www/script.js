@@ -1,6 +1,41 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM Content Loaded');
     
+    // הוספת title לכפתורי התפריט התחתון ולשוניות העליונות
+    document.querySelectorAll('.tab').forEach(tab => {
+        const tabId = tab.dataset.tab;
+        let tabTitle = "";
+        
+        switch(tabId) {
+            case 'tasks': tabTitle = "עבור ללשונית משימות"; break;
+            case 'shopping': tabTitle = "עבור ללשונית קניות"; break;
+            case 'places': tabTitle = "עבור ללשונית מקומות"; break;
+            case 'food': tabTitle = "עבור ללשונית מסעדות"; break;
+            case 'schedule': tabTitle = "עבור ללשונית לו״ז"; break;
+            case 'info': tabTitle = "עבור ללשונית מידע"; break;
+            default: tabTitle = "עבור ללשונית"; break;
+        }
+        
+        tab.title = tabTitle;
+    });
+    
+    document.querySelectorAll('.nav-item').forEach(item => {
+        const tabId = item.dataset.tab;
+        let tabTitle = "";
+        
+        switch(tabId) {
+            case 'tasks': tabTitle = "עבור ללשונית משימות"; break;
+            case 'shopping': tabTitle = "עבור ללשונית קניות"; break;
+            case 'places': tabTitle = "עבור ללשונית מקומות"; break;
+            case 'food': tabTitle = "עבור ללשונית מסעדות"; break;
+            case 'schedule': tabTitle = "עבור ללשונית לו״ז"; break;
+            case 'info': tabTitle = "עבור ללשונית מידע"; break;
+            default: tabTitle = "עבור ללשונית"; break;
+        }
+        
+        item.title = tabTitle;
+    });
+    
     // מנהלי נתונים
     class ItemManager {
         constructor(storageKey) {
@@ -98,10 +133,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    // מנהל לו״ז
+    class ScheduleManager extends ItemManager {
+        constructor() {
+            super('budapestSchedule');
+        }
+        
+        getFilteredItems(day) {
+            return this.items.filter(activity => activity.day === day);
+        }
+    }
+    
     // יצירת מנהלי נתונים
     const taskManager = new TaskManager();
     const placeManager = new PlaceManager();
-    const scheduleManager = new ItemManager('budapestSchedule');
+    const scheduleManager = new ScheduleManager();
     const shoppingManager = new ShoppingManager();
     const foodManager = new FoodManager();
     const infoManager = new InfoManager();
@@ -113,6 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const placeFilter = document.getElementById('place-filter');
     const placeList = document.getElementById('place-list');
     const emptyPlacesState = document.getElementById('empty-places-state');
+    const priorityFilterBtns = document.querySelectorAll('.priority-filter-btn');
     
     // התייחסות לאלמנטים בדף
     const tabs = document.querySelectorAll('.tab');
@@ -135,6 +182,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const foodList = document.getElementById('foodList');
     const emptyFoodState = document.getElementById('emptyFoodState');
     const foodFilter = document.getElementById('foodFilter');
+    const priceFilterBtns = document.querySelectorAll('.price-filter-btn');
+    const ratingFilterBtns = document.querySelectorAll('.rating-filter-btn');
     
     const scheduleInput = document.getElementById('scheduleInput');
     const scheduleTime = document.getElementById('scheduleTime');
@@ -235,6 +284,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    function editTask(task) {
+        document.getElementById('edit-task-id').value = task.id;
+        document.getElementById('edit-task-text').value = task.text;
+        document.getElementById('edit-task-priority').value = task.priority || 'medium';
+        document.getElementById('edit-task-completed').checked = task.completed || false;
+        
+        openModal('edit-task-modal');
+    }
+    
     function renderTasks() {
         const tasks = taskManager.getAllItems().filter(task => {
             if (activeFilter === 'all') return true;
@@ -242,6 +300,20 @@ document.addEventListener('DOMContentLoaded', function() {
             if (activeFilter === 'completed') return task.completed;
             if (activeFilter === 'high') return task.priority === 'high';
             return true;
+        });
+        
+        // מיון המשימות - קודם לפי עדיפות ואז לפי תאריך היצירה
+        tasks.sort((a, b) => {
+            // מיון לפי עדיפות (גבוהה -> בינונית -> נמוכה)
+            const priorityValues = { 'high': 3, 'medium': 2, 'low': 1 };
+            const priorityDiff = priorityValues[b.priority] - priorityValues[a.priority];
+            
+            if (priorityDiff !== 0) {
+                return priorityDiff; // אם העדיפויות שונות, מיין לפי עדיפות
+            }
+            
+            // במקרה של עדיפות זהה, מיין לפי תאריך היצירה (חדש למעלה)
+            return new Date(b.date) - new Date(a.date);
         });
         
         if (tasks.length === 0) {
@@ -264,24 +336,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 taskItem.innerHTML = `
                     <div class="task-content">
+                        <div class="checkbox ${task.completed ? 'checked' : ''}" title="${task.completed ? 'סמן כלא הושלם' : 'סמן כהושלם'}"></div>
                         <div class="task-priority ${task.priority}">${priorityIcon}</div>
                         <div class="task-text">${task.text}</div>
                     </div>
                     <div class="task-actions">
-                        <div class="task-action complete-action" data-id="${task.id}">
-                            <i class="fas ${task.completed ? 'fa-check-circle' : 'fa-circle'}"></i>
-                        </div>
-                        <div class="task-action priority-action" data-id="${task.id}">
+                        <div class="task-action priority-action" data-id="${task.id}" title="שנה עדיפות">
                             <i class="fas fa-flag"></i>
                         </div>
-                        <div class="task-action delete-action" data-id="${task.id}">
+                        <div class="task-action edit-action" data-id="${task.id}" title="ערוך משימה">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <div class="task-action delete-action" data-id="${task.id}" title="מחק משימה">
                             <i class="fas fa-trash-alt"></i>
                         </div>
                     </div>
                 `;
                 
-                const completeAction = taskItem.querySelector('.complete-action');
-                completeAction.addEventListener('click', () => {
+                const checkbox = taskItem.querySelector('.checkbox');
+                checkbox.addEventListener('click', () => {
                     taskManager.toggleComplete(task.id);
                     renderTasks();
                 });
@@ -296,12 +369,23 @@ document.addEventListener('DOMContentLoaded', function() {
                     renderTasks();
                 });
                 
+                const editAction = taskItem.querySelector('.edit-action');
+                editAction.addEventListener('click', () => {
+                    editTask(task);
+                });
+                
                 const deleteAction = taskItem.querySelector('.delete-action');
                 deleteAction.addEventListener('click', () => {
                     if (confirm('האם אתה בטוח שברצונך למחוק את המשימה?')) {
                         taskManager.deleteItem(task.id);
                         renderTasks();
                     }
+                });
+                
+                // הוספת אירוע לחיצה על המשימה עצמה
+                const taskText = taskItem.querySelector('.task-text');
+                taskText.addEventListener('click', () => {
+                    editTask(task);
                 });
                 
                 taskList.appendChild(taskItem);
@@ -352,14 +436,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 const notesText = item.notes ? `<div class="item-notes">${item.notes}</div>` : '';
                 
                 itemEl.innerHTML = `
-                    <div class="checkbox ${item.completed ? 'checked' : ''}"></div>
+                    <div class="checkbox ${item.completed ? 'checked' : ''}" title="${item.completed ? 'סמן כלא נרכש' : 'סמן כנרכש'}"></div>
                     <div class="item-content">
                         <div class="item-text">${item.text}${quantityText} ${categoryIcon}</div>
                         ${notesText}
                     </div>
                     <div class="item-actions">
-                        <button class="edit-btn"><i class="fas fa-edit"></i></button>
-                        <button class="delete-btn"><i class="fas fa-trash-alt"></i></button>
+                        <button class="edit-btn" title="ערוך פריט"><i class="fas fa-edit"></i></button>
+                        <button class="delete-btn" title="מחק פריט"><i class="fas fa-trash-alt"></i></button>
                     </div>
                 `;
                 
@@ -424,9 +508,21 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function renderPlaces() {
         const selectedCategory = placeFilter.value;
-        const places = selectedCategory === 'all' ? 
-                       placeManager.getAllItems() : 
-                       placeManager.getFilteredItems('category', selectedCategory);
+        // במקום להשתמש ב-selectedPriority, אנו נאסוף את כל העדיפויות הפעילות
+        const activePriorities = [];
+        document.querySelectorAll('.priority-filter-btn.active').forEach(btn => {
+            activePriorities.push(btn.dataset.priority);
+        });
+        
+        // סינון לפי קטגוריה
+        let places = selectedCategory === 'all' ? 
+                    placeManager.getAllItems() : 
+                    placeManager.getFilteredItems('category', selectedCategory);
+        
+        // סינון לפי עדיפויות פעילות
+        if (activePriorities.length > 0 && activePriorities.length < 3) {
+            places = places.filter(place => activePriorities.includes(place.priority));
+        }
         
         if (places.length === 0) {
             placeList.style.display = 'none';
@@ -489,7 +585,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         </button>
                         ${place.address ? `
                             <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.address)}" 
-                               target="_blank" class="place-action map-action">
+                               target="_blank" class="place-action map-action" title="פתח את המיקום בגוגל מפס (ייפתח בחלון חדש)">
                                <i class="fas fa-map-marked-alt"></i>
                                <span class="action-text">מפה</span>
                             </a>
@@ -718,18 +814,23 @@ document.addEventListener('DOMContentLoaded', function() {
         if (modal) {
             modal.classList.add('show');
             
-            // הוספת מאזיני אירועים לסגירת המודל
+            // הוספת title לכפתורי סגירה וביטול
             const closeButtons = modal.querySelectorAll('.close-btn, .close-modal');
             closeButtons.forEach(button => {
+                button.title = "סגור";
                 button.addEventListener('click', () => {
                     console.log('Close button clicked');
                     modal.classList.remove('show');
                 });
             });
 
-            // הוספת מאזיני אירועים לכפתורי ביטול
+            // הוספת title לכפתורי ביטול ושמירה
+            const submitButton = modal.querySelector('button[type="submit"]');
+            if (submitButton) submitButton.title = "שמור שינויים";
+            
             const cancelButtons = modal.querySelectorAll('button[type="button"].btn:not(.primary-btn)');
             cancelButtons.forEach(button => {
+                button.title = "בטל שינויים";
                 button.addEventListener('click', () => {
                     console.log('Cancel button clicked');
                     modal.classList.remove('show');
@@ -765,9 +866,40 @@ document.addEventListener('DOMContentLoaded', function() {
         item.addEventListener('click', () => switchTab(item.dataset.tab));
     });
     
+    // הוספת title לכפתורי ההוספה
+    document.getElementById('addTaskBtn').title = "הוסף משימה חדשה";
+    document.getElementById('addShoppingBtn').title = "הוסף פריט לרשימת הקניות";
+    document.getElementById('add-place-btn').title = "הוסף מקום חדש";
+    document.getElementById('addFoodBtn').title = "הוסף מסעדה או מקום אוכל";
+    document.getElementById('addInfoBtn').title = "הוסף מידע חדש";
+    document.getElementById('addScheduleBtn').title = "הוסף פעילות ללו״ז";
+    document.querySelector('.add-day-btn').title = "הוסף יום חדש";
+    document.getElementById('settingsBtn').title = "הגדרות";
+    
     addTaskBtn.addEventListener('click', addTask);
     taskInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') addTask();
+    });
+    
+    // הוספת title לכפתורי הסינון ולכפתורי היום
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        const filterType = btn.dataset.filter;
+        let titleText = "";
+        
+        switch(filterType) {
+            case 'all': titleText = "הצג את כל המשימות"; break;
+            case 'active': titleText = "הצג רק משימות פעילות"; break;
+            case 'completed': titleText = "הצג רק משימות שהושלמו"; break;
+            case 'high': titleText = "הצג משימות בעדיפות גבוהה"; break;
+            default: titleText = "סנן משימות";
+        }
+        
+        btn.title = titleText;
+    });
+    
+    dayButtons.forEach(btn => {
+        const day = btn.dataset.day;
+        btn.title = `הצג לו"ז ליום ${day}`;
     });
     
     // מאזיני אירועים לסינון משימות
@@ -777,6 +909,15 @@ document.addEventListener('DOMContentLoaded', function() {
             btn.classList.add('active');
             activeFilter = btn.dataset.filter;
             renderTasks();
+        });
+    });
+    
+    dayButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            dayButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            activeDay = btn.dataset.day;
+            renderSchedule();
         });
     });
     
@@ -810,26 +951,39 @@ document.addEventListener('DOMContentLoaded', function() {
         addScheduleItem();
     });
     
-    dayButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            dayButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            activeDay = btn.dataset.day;
-            renderSchedule();
-        });
-    });
-    
-    // מאזיני אירועים לסינון משימות
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            activeFilter = btn.dataset.filter;
-            renderTasks();
-        });
-    });
-    
     // טיפול בטפסים
+    document.getElementById('edit-task-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const taskId = document.getElementById('edit-task-id').value;
+        const updatedTask = {
+            text: document.getElementById('edit-task-text').value,
+            priority: document.getElementById('edit-task-priority').value,
+            completed: document.getElementById('edit-task-completed').checked
+        };
+        
+        if (taskId) {
+            // שומר על התאריך המקורי של המשימה בעת עדכון
+            const originalTask = taskManager.getAllItems().find(task => task.id === taskId);
+            if (originalTask && originalTask.date) {
+                updatedTask.date = originalTask.date;
+            } else {
+                updatedTask.date = new Date().toISOString();
+            }
+            
+            taskManager.updateItem(taskId, updatedTask);
+        } else {
+            taskManager.addItem({
+                id: Date.now().toString(),
+                date: new Date().toISOString(),
+                ...updatedTask
+            });
+        }
+        
+        renderTasks();
+        closeAllModals();
+    });
+    
     document.getElementById('edit-shopping-form').addEventListener('submit', function(e) {
         e.preventDefault();
         
@@ -956,9 +1110,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function renderFood() {
         const selectedCategory = foodFilter.value;
-        const foods = selectedCategory === 'all' ? 
+        
+        // אוסף את כל אפשרויות המחיר הפעילות
+        const activePrices = [];
+        document.querySelectorAll('.price-filter-btn.active').forEach(btn => {
+            activePrices.push(btn.dataset.price);
+        });
+        
+        // מקבל את הדירוג המינימלי הנדרש
+        let minRating = 0;
+        const activeRatingBtn = document.querySelector('.rating-filter-btn.active');
+        if (activeRatingBtn) {
+            minRating = parseInt(activeRatingBtn.dataset.rating) || 0;
+        }
+        
+        // סינון לפי קטגוריה
+        let foods = selectedCategory === 'all' ? 
                       foodManager.getAllItems() : 
                       foodManager.getFilteredItems('category', selectedCategory);
+        
+        // סינון לפי מחיר
+        if (activePrices.length > 0 && activePrices.length < 3) {
+            foods = foods.filter(food => activePrices.includes(food.price));
+        }
+        
+        // סינון לפי דירוג
+        if (minRating > 0) {
+            foods = foods.filter(food => {
+                const rating = parseInt(food.rating) || 0;
+                return rating >= minRating;
+            });
+        }
         
         if (foods.length === 0) {
             foodList.style.display = 'none';
@@ -981,6 +1163,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     food.price === 'cheap' ? '<i class="fas fa-dollar-sign"></i>' :
                     food.price === 'medium' ? '<i class="fas fa-dollar-sign"></i><i class="fas fa-dollar-sign"></i>' :
                     '<i class="fas fa-dollar-sign"></i><i class="fas fa-dollar-sign"></i><i class="fas fa-dollar-sign"></i>';
+                
+                // יצירת הצגה ויזואלית של הדירוג עם כוכבים
+                let ratingStars = '';
+                const rating = parseInt(food.rating) || 0;
+                
+                for (let i = 1; i <= 5; i++) {
+                    if (i <= rating) {
+                        ratingStars += '<i class="fas fa-star"></i>'; // כוכב מלא
+                    } else {
+                        ratingStars += '<i class="far fa-star"></i>'; // כוכב ריק
+                    }
+                }
                 
                 const foodCard = document.createElement('div');
                 foodCard.className = `food-card ${food.visited ? 'visited' : ''}`;
@@ -1013,6 +1207,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                     </div>
                     <div class="food-body">
+                        ${rating > 0 ? `<div class="food-rating" title="דירוג: ${rating} מתוך 5">${ratingStars}</div>` : ''}
                         ${food.address ? `<div class="food-address"><i class="fas fa-map-marker-alt"></i> ${food.address}</div>` : ''}
                         ${food.notes ? `<div class="food-notes">${food.notes}</div>` : ''}
                     </div>
@@ -1023,7 +1218,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         </button>
                         ${food.address ? `
                             <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(food.address)}" 
-                               target="_blank" class="food-action map-action">
+                               target="_blank" class="food-action map-action" title="פתח את המיקום בגוגל מפס (ייפתח בחלון חדש)">
                                <i class="fas fa-map-marked-alt"></i>
                                <span class="action-text">מפה</span>
                             </a>
@@ -1072,8 +1267,51 @@ document.addEventListener('DOMContentLoaded', function() {
     
     foodFilter.addEventListener('change', renderFood);
     
+    // מאזיני אירועים לכפתורי סינון מחיר
+    priceFilterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // החלפת מצב הכפתור (פעיל/לא פעיל)
+            this.classList.toggle('active');
+            renderFood();
+            
+            // בדיקה אם אין כפתורים פעילים, במקרה כזה נפעיל את כולם
+            const activeBtns = document.querySelectorAll('.price-filter-btn.active');
+            if (activeBtns.length === 0) {
+                priceFilterBtns.forEach(b => b.classList.add('active'));
+                renderFood();
+            }
+        });
+    });
+    
+    // מאזיני אירועים לכפתורי סינון דירוג
+    ratingFilterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // ביטול פעיל מכל הכפתורים
+            ratingFilterBtns.forEach(b => b.classList.remove('active'));
+            // הפעלת הכפתור הנוכחי
+            this.classList.add('active');
+            renderFood();
+        });
+    });
+    
     // הוספת מאזין אירועים לפילטר מקומות
     placeFilter.addEventListener('change', renderPlaces);
+    
+    // הוספת מאזין אירועים למיון לפי עדיפות
+    priorityFilterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // החלפת מצב הכפתור (פעיל/לא פעיל)
+            this.classList.toggle('active');
+            renderPlaces();
+            
+            // בדיקה אם אין כפתורים פעילים, במקרה כזה נפעיל את כולם
+            const activeBtns = document.querySelectorAll('.priority-filter-btn.active');
+            if (activeBtns.length === 0) {
+                priorityFilterBtns.forEach(b => b.classList.add('active'));
+                renderPlaces();
+            }
+        });
+    });
     
     // רנדור התצוגה הראשונית
     renderTasks();

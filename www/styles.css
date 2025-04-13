@@ -697,6 +697,30 @@ header p {
     flex-grow: 1;
 }
 
+.task-content .checkbox {
+    margin-left: 10px;
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    border: 2px solid var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.task-content .checkbox.checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.task-content .checkbox.checked:after {
+    content: '✓';
+    color: white;
+    font-size: 14px;
+}
+
 .task-priority {
     margin-left: 10px;
     font-size: 16px;
@@ -1450,6 +1474,23 @@ header p {
     line-height: 1.4;
 }
 
+.food-rating {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    color: #FFD93D; /* צהוב */
+    font-size: 1.1em;
+}
+
+.food-rating .fas.fa-star {
+    color: #FFD93D; /* כוכב מלא - צהוב */
+}
+
+.food-rating .far.fa-star {
+    color: #ccc; /* כוכב ריק - אפור בהיר */
+}
+
 .food-footer {
     display: flex;
     justify-content: space-around;
@@ -1937,4 +1978,147 @@ header p {
 
 .toast.warning {
     background-color: #f39c12;
+}
+
+/* סגנונות לסינון עדיפויות */
+.priority-filter-options {
+    margin-bottom: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    padding: 0.8rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.filter-title {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: var(--dark-color);
+}
+
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.priority-filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    background-color: #f0f2f5;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid transparent;
+}
+
+.priority-filter-btn.active {
+    background-color: white;
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.priority-filter-btn:not(.active) {
+    opacity: 0.6;
+}
+
+.priority-filter-btn[data-priority="high"] i {
+    color: var(--danger-color);
+}
+
+.priority-filter-btn[data-priority="medium"] i {
+    color: #FFD93D;
+}
+
+.priority-filter-btn[data-priority="low"] i {
+    color: var(--success-color);
+}
+
+.priority-filter-btn:hover {
+    background-color: #e0e3e8;
+}
+
+/* סגנונות לסינון מחירים */
+.price-filter-options, .rating-filter-options {
+    background-color: white;
+    border-radius: 8px;
+    padding: 0.5rem 0.8rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    flex: 1;
+    min-width: 200px;
+}
+
+.filter-title {
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+    color: var(--dark-color);
+    font-size: 0.9rem;
+}
+
+.filters-row {
+    margin-bottom: 1rem;
+}
+
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+
+.price-filter-btn, .rating-filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    background-color: #f0f2f5;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid transparent;
+}
+
+.price-filter-btn.active, .rating-filter-btn.active {
+    background-color: white;
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.price-filter-btn:not(.active), .rating-filter-btn:not(.active) {
+    opacity: 0.6;
+}
+
+.price-filter-btn[data-price="cheap"] i {
+    color: var(--success-color);
+}
+
+.price-filter-btn[data-price="medium"] i {
+    color: #FFD93D; /* צהוב */
+}
+
+.price-filter-btn[data-price="expensive"] i {
+    color: var(--danger-color);
+}
+
+.rating-filter-btn i {
+    color: #FFD93D; /* צהוב */
+}
+
+.price-filter-btn:hover, .rating-filter-btn:hover {
+    background-color: #e0e3e8;
+}
+
+@media (max-width: 600px) {
+    .filters-row {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .price-filter-options, .rating-filter-options {
+        width: 100%;
+    }
 } 
