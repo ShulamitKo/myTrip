@@ -61,7 +61,7 @@
         <div class="empty-state" id="emptyTasksState">
             <i class="fas fa-tasks"></i>
             <h3>אין משימות</h3>
-            <p>הוסף משימות לטיול שלך לבודפסט</p>
+            <p>הוסף משימות לטיול שלך</p>
         </div>
         
         <!-- מודאל עריכת משימה -->
@@ -127,7 +127,7 @@
         <div class="empty-state" id="emptyShoppingState">
             <i class="fas fa-shopping-bag"></i>
             <h3>אין פריטים ברשימת הקניות</h3>
-            <p>הוסף פריטים שברצונך לקנות בבודפסט</p>
+            <p>הוסף פריטים שברצונך לקנות בטיול</p>
         </div>
         
         <!-- מודאל עריכת פריט קניות -->
@@ -343,7 +343,7 @@
         <div class="empty-state" id="emptyFoodState">
             <i class="fas fa-utensils"></i>
             <h3>אין מסעדות ברשימה</h3>
-            <p>הוסף מסעדות ומקומות אוכל שתרצה לבקר בהם בבודפסט</p>
+            <p>הוסף מסעדות ומקומות אוכל שתרצה לבקר בהם</p>
         </div>
         
         <!-- מודאל עריכת מסעדה -->
@@ -593,6 +593,30 @@
                     <p>הטיול שלי - גרסה 1.0.0</p>
                     <p>אפליקציה לניהול הטיול שלך</p>
                 </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- מודל אישור מחיקה -->
+    <div id="confirm-delete-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" title="סגור">&times;</button>
+            <div class="modal-header">
+                <h2 id="confirm-delete-title">אישור מחיקה</h2>
+            </div>
+            <div class="modal-body">
+                <div class="delete-icon-container">
+                    <i class="fas fa-trash-alt delete-icon-large"></i>
+                </div>
+                <p id="confirm-delete-message">האם למחוק את הפריט?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-delete-cancel" class="btn" title="ביטול">
+                    <i class="fas fa-times"></i> ביטול
+                </button>
+                <button id="confirm-delete-confirm" class="btn primary-btn" title="אישור מחיקה">
+                    <i class="fas fa-trash-alt"></i> מחק
+                </button>
             </div>
         </div>
     </div>

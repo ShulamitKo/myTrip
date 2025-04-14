@@ -1,4 +1,4 @@
-package com.mytrip.budapest;
+package com.mytrip.app;
 
 import com.getcapacitor.BridgeActivity;
 

@@ -136,11 +136,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // מנהל לו״ז
     class ScheduleManager extends ItemManager {
         constructor() {
-            super('budapestSchedule');
+            super('schedule');
         }
         
-        getFilteredItems(day) {
-            return this.items.filter(activity => activity.day === day);
+        getFilteredItems(property, value) {
+            // מחזיר רשימה מסוננת לפי המאפיין והערך שהתקבלו
+            return this.items.filter(item => item[property] === value);
         }
     }
     
@@ -376,10 +377,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const deleteAction = taskItem.querySelector('.delete-action');
                 deleteAction.addEventListener('click', () => {
-                    if (confirm('האם אתה בטוח שברצונך למחוק את המשימה?')) {
+                    showDeleteConfirmation('האם אתה בטוח שברצונך למחוק את המשימה?', () => {
                         taskManager.deleteItem(task.id);
                         renderTasks();
-                    }
+                    });
                 });
                 
                 // הוספת אירוע לחיצה על המשימה עצמה
@@ -460,10 +461,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const deleteBtn = itemEl.querySelector('.delete-btn');
                 deleteBtn.addEventListener('click', () => {
-                    if (confirm('האם אתה בטוח שברצונך למחוק את הפריט?')) {
+                    showDeleteConfirmation('האם אתה בטוח שברצונך למחוק את הפריט?', () => {
                         shoppingManager.deleteItem(item.id);
                         renderShoppingList();
-                    }
+                    });
                 });
                 
                 shoppingList.appendChild(itemEl);
@@ -615,10 +616,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const deleteAction = placeCard.querySelector('.delete-action');
                 deleteAction.addEventListener('click', () => {
-                    if (confirm('האם אתה בטוח שברצונך למחוק את המקום?')) {
+                    showDeleteConfirmation('האם אתה בטוח שברצונך למחוק את המקום?', () => {
                         placeManager.deleteItem(place.id);
                         renderPlaces();
-                    }
+                    });
                 });
                 
                 placeList.appendChild(placeCard);
@@ -632,16 +633,24 @@ document.addEventListener('DOMContentLoaded', function() {
         const timeValue = scheduleTime.value;
         
         if (scheduleText && timeValue) {
+            // קבלת היום הפעיל הנוכחי מהאלמנט הפעיל בממשק
+            const activeButton = document.querySelector('.day-btn.active');
+            const currentActiveDay = activeButton ? activeButton.dataset.day : activeDay;
+            
+            console.log('Adding schedule item for day:', currentActiveDay, 'Text:', scheduleText, 'Time:', timeValue);
+            
             const newItem = {
                 id: Date.now().toString(),
                 text: scheduleText,
                 time: timeValue,
-                day: activeDay,
+                day: currentActiveDay,
                 completed: false,
                 category: 'general'
             };
             
             scheduleManager.addItem(newItem);
+            console.log('Added new schedule item:', newItem);
+            
             renderSchedule();
             
             scheduleInput.value = '';
@@ -667,11 +676,15 @@ document.addEventListener('DOMContentLoaded', function() {
             e.stopPropagation();
             
             if (scheduleTime.value && scheduleInput.value) {
+                // קבלת היום הפעיל הנוכחי מהאלמנט הפעיל בממשק
+                const activeButton = document.querySelector('.day-btn.active');
+                const currentActiveDay = activeButton ? activeButton.dataset.day : activeDay;
+                
                 // עדכון הפריט הקיים
                 scheduleManager.updateItem(activity.id, {
                     time: scheduleTime.value,
                     text: scheduleInput.value.trim(),
-                    day: activeDay
+                    day: currentActiveDay
                 });
                 
                 // איפוס הטופס
@@ -720,6 +733,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function renderSchedule() {
         const activities = scheduleManager.getFilteredItems('day', activeDay);
+        console.log('Rendering schedule for day:', activeDay, 'Activities:', activities); 
+        console.log('All schedule items in localStorage:', scheduleManager.getAllItems());
         activities.sort((a, b) => a.time.localeCompare(b.time));
         
         if (activities.length === 0) {
@@ -768,10 +783,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const deleteBtn = timeBlock.querySelector('.time-block-btn.delete');
                 deleteBtn.addEventListener('click', () => {
-                    if (confirm('האם אתה בטוח שברצונך למחוק את הפעילות?')) {
+                    showDeleteConfirmation('האם אתה בטוח שברצונך למחוק את הפעילות?', () => {
                         scheduleManager.deleteItem(activity.id);
                         renderSchedule();
-                    }
+                    });
                 });
                 
                 scheduleList.appendChild(timeBlock);
@@ -912,11 +927,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    // מאזין אירועים לכפתורי היום
     dayButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            dayButtons.forEach(b => b.classList.remove('active'));
+            console.log('Day button clicked:', btn.dataset.day); // שורת לוג לדיבאג
+            document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             activeDay = btn.dataset.day;
+            console.log('Active day changed to:', activeDay); // שורת לוג לדיבאג
             renderSchedule();
         });
     });
@@ -1248,10 +1266,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const deleteAction = foodCard.querySelector('.delete-action');
                 deleteAction.addEventListener('click', () => {
-                    if (confirm('האם אתה בטוח שברצונך למחוק את המסעדה?')) {
+                    showDeleteConfirmation('האם אתה בטוח שברצונך למחוק את המסעדה?', () => {
                         foodManager.deleteItem(food.id);
                         renderFood();
-                    }
+                    });
                 });
                 
                 foodList.appendChild(foodCard);
@@ -1317,9 +1335,19 @@ document.addEventListener('DOMContentLoaded', function() {
     renderTasks();
     renderShoppingList();
     renderPlaces();
-    renderSchedule();
     renderFood();
     renderInfo();
+    
+    // הגדרת הכפתור הפעיל בלשונית לו"ז
+    document.querySelectorAll('.day-btn').forEach(btn => {
+        if (btn.dataset.day === activeDay) {
+            document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+    });
+    
+    // רנדור של הלו"ז חייב להיות אחרי הגדרת הכפתור הפעיל
+    renderSchedule();
 
     // וידוא שהטאב הנכון פעיל בטעינת הדף
     document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -1427,10 +1455,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const deleteAction = infoCard.querySelector('.delete-action');
                 deleteAction.addEventListener('click', () => {
-                    if (confirm('האם אתה בטוח שברצונך למחוק את המידע?')) {
+                    showDeleteConfirmation('האם אתה בטוח שברצונך למחוק את המידע?', () => {
                         infoManager.deleteItem(info.id);
                         renderInfo();
-                    }
+                    });
                 });
                 
                 infoList.appendChild(infoCard);
@@ -1492,24 +1520,24 @@ document.addEventListener('DOMContentLoaded', function() {
         const sampleInfo = [
             {
                 id: '1',
-                title: 'טיפים לטיול בבודפסט',
+                title: 'טיפים שימושיים לטיול',
                 content: `
-                    <p><i class="fas fa-money-bill-wave"></i> המטבע המקומי: פורינט הונגרי (HUF)</p>
-                    <p><i class="fas fa-language"></i> שפה: הונגרית, אך רבים מדברים אנגלית בתיירות</p>
-                    <p><i class="fas fa-subway"></i> תחבורה: מטרו, חשמלית ואוטובוסים זמינים</p>
-                    <p><i class="fas fa-phone"></i> חיוג: קידומת +36</p>
+                    <p><i class="fas fa-money-bill-wave"></i> זכור לבדוק את המטבע המקומי</p>
+                    <p><i class="fas fa-language"></i> בדוק אילו שפות מדוברות ביעד</p>
+                    <p><i class="fas fa-subway"></i> בדוק אפשרויות תחבורה ציבורית</p>
+                    <p><i class="fas fa-phone"></i> שמור מספרי טלפון חשובים</p>
                 `,
                 icon: 'info-circle'
             },
             {
                 id: '2',
-                title: 'מקומות מומלצים',
+                title: 'הצעות למקומות לבקר',
                 content: `
-                    <p><i class="fas fa-landmark"></i> גבעת המצודה ובית המחוקקים</p>
-                    <p><i class="fas fa-hot-tub"></i> מרחצאות תרמיים (Széchenyi, Gellért)</p>
-                    <p><i class="fas fa-store"></i> שוק מרכזי (Great Market Hall)</p>
-                    <p><i class="fas fa-building"></i> רובע היהודי ובתי הקפה</p>
-                    <p><i class="fas fa-water"></i> שייט על הדנובה</p>
+                    <p><i class="fas fa-landmark"></i> אתרים היסטוריים</p>
+                    <p><i class="fas fa-store"></i> שווקים מקומיים</p>
+                    <p><i class="fas fa-utensils"></i> מסעדות מומלצות</p>
+                    <p><i class="fas fa-mountain"></i> מסלולי טבע</p>
+                    <p><i class="fas fa-map-marked-alt"></i> אטרקציות מרכזיות</p>
                 `,
                 icon: 'landmark'
             },
@@ -1518,7 +1546,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 title: 'מספרי חירום',
                 content: `
                     <p><i class="fas fa-ambulance"></i> חירום כללי: 112</p>
-                    <p><i class="fas fa-passport"></i> שגרירות ישראל: +36-1-392-6200</p>
+                    <p><i class="fas fa-passport"></i> שגרירות ישראל: [חפש מספר]</p>
                 `,
                 icon: 'ambulance'
             }
@@ -1592,23 +1620,29 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     addDayBtn.addEventListener('click', () => {
-        const dayCount = dayButtons.length;
+        // מקבלים את הרשימה המעודכנת של כפתורי יום
+        const currentDayButtons = document.querySelectorAll('.day-btn');
+        const dayCount = currentDayButtons.length;
         const newDayNum = dayCount + 1;
         
         const newDayBtn = document.createElement('button');
         newDayBtn.className = 'day-btn';
         newDayBtn.dataset.day = newDayNum.toString();
         newDayBtn.textContent = `יום ${newDayNum}`;
+        newDayBtn.title = `הצג לו"ז ליום ${newDayNum}`;
         
-        newDayBtn.addEventListener('click', () => {
-            dayButtons.forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
-            newDayBtn.classList.add('active');
-            activeDay = newDayNum.toString();
-            renderSchedule();
-        });
-        
+        // מוסיפים את הכפתור החדש לפני כפתור ה-+
         addDayBtn.parentNode.insertBefore(newDayBtn, addDayBtn);
+        
+        // מעדכנים את מאזיני האירועים לכל הכפתורים
+        setupDayButtonEvents();
+        
+        // מעדכנים את היום הפעיל לחדש
+        document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+        newDayBtn.classList.add('active');
+        activeDay = newDayNum.toString();
+        console.log('Added new day button, active day is now:', activeDay);
+        renderSchedule();
     });
 
     // ===== פונקציות הגדרות =====
@@ -1738,8 +1772,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // איפוס כל הנתונים באפליקציה
     function resetApp() {
-        if (confirm('האם אתה בטוח שברצונך למחוק את כל הנתונים? פעולה זו אינה ניתנת לביטול!')) {
-            if (confirm('אזהרה אחרונה: כל הנתונים יימחקו לצמיתות. האם להמשיך?')) {
+        // מוסיף פרמטר נוסף true עבור חלון האזהרה המיוחד
+        showDeleteConfirmation('האם אתה בטוח שברצונך למחוק את כל הנתונים? פעולה זו אינה ניתנת לביטול!', () => {
+            showDeleteConfirmation('אזהרה אחרונה: כל הנתונים יימחקו לצמיתות. האם להמשיך?', () => {
                 // גיבוי אוטומטי לפני מחיקה
                 exportData();
                 
@@ -1752,8 +1787,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 setTimeout(() => {
                     window.location.reload();
                 }, 1500);
-            }
-        }
+            }, true);
+        }, true);
     }
 
     // הצגת הודעה למשתמש
@@ -1785,4 +1820,124 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // אתחול הגדרות
     setupSettingsHandlers();
+
+    // פונקציה להוספת מאזיני אירועים לכפתורי היום
+    function setupDayButtonEvents() {
+        document.querySelectorAll('.day-btn').forEach(btn => {
+            // מוודאים שהכפתור לא כבר רשום לאירוע (למניעת רישום כפול)
+            btn.removeEventListener('click', dayButtonClickHandler);
+            btn.addEventListener('click', dayButtonClickHandler);
+        });
+    }
+    
+    // פונקציית טיפול בלחיצה על כפתור יום
+    function dayButtonClickHandler(e) {
+        console.log('Day button clicked:', this.dataset.day);
+        document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        activeDay = this.dataset.day;
+        console.log('Active day changed to:', activeDay);
+        renderSchedule();
+    }
+
+    // התחלת האזנה לכפתורי היום הקיימים
+    setupDayButtonEvents();
+
+    // פונקציה נגישה לאישור מחיקה
+    function showDeleteConfirmation(message, deleteCallback, isSettingsDelete = false) {
+        const modal = document.getElementById('confirm-delete-modal');
+        const messageElement = document.getElementById('confirm-delete-message');
+        const confirmButton = document.getElementById('confirm-delete-confirm');
+        const cancelButton = document.getElementById('confirm-delete-cancel');
+        
+        // ניהול מחלקה מיוחדת למחיקת הגדרות
+        if (isSettingsDelete) {
+            modal.classList.add('settings-delete-modal');
+        } else {
+            modal.classList.remove('settings-delete-modal');
+        }
+        
+        // הגדרת ההודעה
+        if (message) {
+            messageElement.textContent = message;
+        } else {
+            messageElement.textContent = 'האם למחוק את הפריט?';
+        }
+        
+        // הוספת אייקונים לכפתורים
+        confirmButton.innerHTML = '<i class="fas fa-trash-alt"></i> מחק';
+        cancelButton.innerHTML = '<i class="fas fa-times"></i> ביטול';
+        
+        // סגירת כל החלונות האחרים קודם
+        document.querySelectorAll('.modal.show').forEach(m => {
+            if (m !== modal) m.classList.remove('show');
+        });
+        
+        // פתיחת המודל
+        modal.classList.add('show');
+        
+        // מחדש את האנימציה של האייקון
+        const deleteIcon = modal.querySelector('.delete-icon-large');
+        if (deleteIcon) {
+            deleteIcon.style.animation = 'none';
+            setTimeout(() => {
+                deleteIcon.style.animation = 'trembleIcon 0.4s ease-in-out';
+            }, 10);
+        }
+        
+        // מיקוד על כפתור הביטול לנגישות טובה יותר (מניעת מחיקה בטעות)
+        setTimeout(() => {
+            cancelButton.focus();
+        }, 100);
+        
+        // טיפול באירועי לחיצה
+        const handleCancel = () => {
+            closeDeleteConfirmation();
+        };
+        
+        const handleConfirm = () => {
+            closeDeleteConfirmation();
+            if (typeof deleteCallback === 'function') {
+                deleteCallback();
+            }
+        };
+        
+        const closeDeleteConfirmation = () => {
+            modal.classList.remove('show');
+            // הסרת המחלקה המיוחדת בעת סגירת החלון
+            modal.classList.remove('settings-delete-modal');
+            document.body.style.overflow = '';
+            
+            // הסרת מאזיני האירועים כדי למנוע כפילויות
+            confirmButton.removeEventListener('click', handleConfirm);
+            cancelButton.removeEventListener('click', handleCancel);
+            document.querySelector('#confirm-delete-modal .close-btn').removeEventListener('click', handleCancel);
+            document.removeEventListener('keydown', handleKeyPress);
+            modal.removeEventListener('click', handleModalClick);
+        };
+        
+        const handleKeyPress = (e) => {
+            if (e.key === 'Escape') {
+                handleCancel();
+            } else if (e.key === 'Enter' && document.activeElement === confirmButton) {
+                handleConfirm();
+            }
+        };
+        
+        const handleModalClick = (e) => {
+            if (e.target === modal) {
+                handleCancel();
+            }
+        };
+        
+        // מנטרל גלילה בגוף העמוד כשהמודל פתוח
+        document.body.style.overflow = 'hidden';
+        
+        // הוספת מאזיני אירועים
+        confirmButton.addEventListener('click', handleConfirm);
+        cancelButton.addEventListener('click', handleCancel);
+        document.querySelector('#confirm-delete-modal .close-btn').addEventListener('click', handleCancel);
+        document.addEventListener('keydown', handleKeyPress);
+        modal.addEventListener('click', handleModalClick);
+    }
 }); 

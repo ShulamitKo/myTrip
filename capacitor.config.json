@@ -1,5 +1,6 @@
 {
-  "appId": "com.mytrip.budapest",
+  "appId": "io.ionic.mytrip",
   "appName": "הטיול שלי",
-  "webDir": "www"
+  "webDir": "www",
+  "bundledWebRuntime": false
 }
