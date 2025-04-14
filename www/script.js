@@ -1710,24 +1710,322 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        // יצירת קובץ JSON להורדה
+        // יצירת מחרוזת JSON
         const dataStr = JSON.stringify(data, null, 2);
         const dataBlob = new Blob([dataStr], { type: 'application/json' });
-        const url = URL.createObjectURL(dataBlob);
         
-        // יצירת קישור להורדה והפעלתו
-        const a = document.createElement('a');
-        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-        a.download = `mytrip-backup-${timestamp}.json`;
-        a.href = url;
-        a.click();
+        // בדיקה אם האפליקציה רצה על מובייל (Capacitor או Cordova)
+        const isMobile = typeof window.Capacitor !== 'undefined' || typeof cordova !== 'undefined';
         
-        // שחרור משאבים
-        setTimeout(() => {
-            URL.revokeObjectURL(url);
-        }, 100);
+        if (isMobile) {
+            // בדיקת הרשאות - רק באנדרואיד
+            requestStoragePermission().then(() => {
+                // יצירת קובץ JSON בזיכרון המכשיר
+                showToast('מייצא נתונים...', 'info');
+                
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                const fileName = `mytrip-backup-${timestamp}.json`;
+                
+                console.log("מתחיל תהליך ייצוא למובייל");
+                
+                // בדיקה אם קיים plugin של cordova לקבצים
+                if (typeof cordova !== 'undefined' && cordova.file) {
+                    console.log("משתמש ב-Cordova File Plugin");
+                    
+                    // שימוש בשיטה פשוטה יותר - ניסיון ישיר לתיקיית ההורדות
+                    try {
+                        // בחירה בין אפשרויות לתיקיית ההורדות, לפי סדר עדיפות
+                        const targetDir = getDownloadsPath();
+                        console.log(`מנסה להשתמש בתיקייה: ${targetDir}`);
+                        
+                        if (!targetDir) {
+                            throw new Error("לא נמצאה תיקיית הורדות זמינה");
+                        }
+                        
+                        // שימוש בממשק File API של Cordova
+                        window.resolveLocalFileSystemURL(targetDir, function(dirEntry) {
+                            console.log(`הצלחה בגישה לתיקייה: ${dirEntry.fullPath}`);
+                            
+                            // יצירת הקובץ
+                            dirEntry.getFile(fileName, { create: true, exclusive: false }, function(fileEntry) {
+                                console.log(`הצלחה ביצירת קובץ: ${fileEntry.fullPath}`);
+                                
+                                // כתיבה לקובץ
+                                fileEntry.createWriter(function(writer) {
+                                    writer.onwriteend = function() {
+                                        console.log(`הקובץ נשמר ב: ${fileEntry.nativeURL || fileEntry.fullPath}`);
+                                        
+                                        // הצגת הודעה פשוטה בלבד ללא נתיב
+                                        showToast(`הנתונים יוצאו בהצלחה לתיקיית ההורדות`, 'success', 3000);
+                                        
+                                        // לא מציגים את הנתיב ולא משתפים
+                                    };
+                                    
+                                    writer.onerror = function(err) {
+                                        console.error("שגיאה בכתיבה לקובץ:", err);
+                                        showToast("שגיאה בשמירת הקובץ", 'error');
+                                    };
+                                    
+                                    // כתיבת התוכן לקובץ
+                                    writer.write(dataBlob);
+                                }, function(err) {
+                                    console.error("שגיאה ביצירת כותב קבצים:", err);
+                                    showToast("שגיאה ביצירת הקובץ", 'error');
+                                });
+                            }, function(err) {
+                                console.error("שגיאה ביצירת קובץ:", err);
+                                showToast("שגיאה ביצירת הקובץ", 'error');
+                            });
+                        }, function(err) {
+                            console.error("שגיאה בגישה לתיקיית ההורדות:", err);
+                            showToast("שגיאה בגישה לתיקיית ההורדות", 'error');
+                            
+                            // ננסה במיקום אחר
+                            fallbackToInternalStorage(fileName, dataBlob);
+                        });
+                    } catch (err) {
+                        console.error("שגיאה כללית בייצוא הקובץ:", err);
+                        showToast("שגיאה בייצוא הקובץ", 'error');
+                        
+                        // נסיון נוסף במיקום אחר
+                        fallbackToInternalStorage(fileName, dataBlob);
+                    }
+                } else {
+                    // במקרה שאין את הפלאגין, נשתמש ב-File System Access API אם קיים
+                    console.log("אין Cordova File Plugin, מנסה דרכים חלופיות");
+                    
+                    if ('showSaveFilePicker' in window) {
+                        const opts = {
+                            suggestedName: fileName,
+                            types: [{
+                                description: 'JSON File',
+                                accept: { 'application/json': ['.json'] }
+                            }]
+                        };
+                        
+                        window.showSaveFilePicker(opts)
+                            .then(fileHandle => fileHandle.createWritable())
+                            .then(writable => {
+                                writable.write(dataBlob);
+                                return writable.close();
+                            })
+                            .then(() => showToast('הנתונים יוצאו בהצלחה!'))
+                            .catch(err => {
+                                console.error('שגיאה בשמירת הקובץ:', err);
+                                showToast('אירעה שגיאה בייצוא הנתונים.', 'error');
+                            });
+                    } else {
+                        // אם אין שום אפשרות אחרת, ננסה את שיטת הדפדפן הרגילה
+                        const url = URL.createObjectURL(dataBlob);
+                        const a = document.createElement('a');
+                        a.download = fileName;
+                        a.href = url;
+                        a.click();
+                        
+                        setTimeout(() => {
+                            URL.revokeObjectURL(url);
+                        }, 100);
+                        
+                        showToast('הנתונים יוצאו בהצלחה! אם לא ראית חלון הורדה, ייתכן שהורדת קבצים אינה נתמכת במכשירך.');
+                    }
+                }
+            }).catch(error => {
+                console.error('שגיאה בקבלת הרשאות:', error);
+                showToast('אין הרשאות מספיקות לשמירת קבצים. אנא נסה לאפשר גישה לקבצים בהגדרות האפליקציה.', 'error');
+            });
+        } else {
+            // שיטה רגילה לדפדפן - יצירת קישור להורדה והפעלתו
+            const url = URL.createObjectURL(dataBlob);
+            const a = document.createElement('a');
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            a.download = `mytrip-backup-${timestamp}.json`;
+            a.href = url;
+            a.click();
+            
+            // שחרור משאבים
+            setTimeout(() => {
+                URL.revokeObjectURL(url);
+            }, 100);
+            
+            showToast('הנתונים יוצאו בהצלחה!');
+        }
+    }
+    
+    // פונקציה לקבלת נתיב תיקיית ההורדות המועדפת
+    function getDownloadsPath() {
+        if (typeof cordova === 'undefined' || !cordova.file) {
+            return null;
+        }
         
-        showToast('הנתונים יוצאו בהצלחה!');
+        // אנדרואיד - ננסה קודם כל את תיקיית ההורדות הציבורית
+        if (cordova.file.externalRootDirectory) {
+            return cordova.file.externalRootDirectory + "Download/";
+        }
+        
+        // חלופה באנדרואיד חדש יותר
+        if (cordova.file.externalDownloadsDirectory) {
+            return cordova.file.externalDownloadsDirectory;
+        }
+        
+        // חלופה לאנדרואיד עם הרשאות שונות
+        if (cordova.file.externalDataDirectory) {
+            return cordova.file.externalDataDirectory;
+        }
+        
+        // אם אין אפשרות לתיקיית הורדות חיצונית, נשתמש בתיקייה פנימית
+        return cordova.file.dataDirectory;
+    }
+    
+    // פונקציית מעבר לאחסון פנימי אם האחסון החיצוני לא עובד
+    function fallbackToInternalStorage(fileName, dataBlob) {
+        console.log("מנסה לשמור בתיקייה פנימית כברירת מחדל");
+        
+        if (typeof cordova === 'undefined' || !cordova.file) {
+            showToast("לא ניתן למצוא אפשרות לשמירת הקובץ", 'error');
+            return;
+        }
+        
+        // ננסה בתיקייה פנימית שלא צריכה הרשאות מיוחדות
+        window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dirEntry) {
+            console.log(`גישה לתיקייה פנימית: ${dirEntry.fullPath}`);
+            
+            dirEntry.getFile(fileName, { create: true, exclusive: false }, function(fileEntry) {
+                fileEntry.createWriter(function(writer) {
+                    writer.onwriteend = function() {
+                        console.log(`הקובץ נשמר בתיקייה פנימית: ${fileEntry.nativeURL || fileEntry.fullPath}`);
+                        showToast(`הנתונים יוצאו בהצלחה`, 'success', 3000);
+                        
+                        // לא משתמשים בפונקציית openExportedFile
+                    };
+                    
+                    writer.onerror = function(err) {
+                        console.error("שגיאה בכתיבה לקובץ פנימי:", err);
+                        showToast("שגיאה בשמירת הקובץ", 'error');
+                    };
+                    
+                    writer.write(dataBlob);
+                });
+            }, function(err) {
+                console.error("שגיאה ביצירת קובץ פנימי:", err);
+                showToast("לא ניתן לשמור את הקובץ", 'error');
+            });
+        }, function(err) {
+            console.error("שגיאה בגישה לתיקייה פנימית:", err);
+            showToast("שגיאה בגישה לתיקייה פנימית", 'error');
+        });
+    }
+
+    // בקשת הרשאות גישה לאחסון
+    function requestStoragePermission() {
+        return new Promise((resolve, reject) => {
+            // לאנדרואיד מגרסה 10 ומעלה יש גישה מוגבלת לאחסון חיצוני
+            // בודקים אם מדובר באפליקציית Cordova על מכשיר Android
+            if (typeof cordova !== 'undefined' && 
+                cordova.plugins && 
+                cordova.plugins.permissions) {
+                
+                console.log("מנסה לבקש הרשאות דרך cordova.plugins.permissions");
+                showToast("מבקש הרשאות אחסון...", "info");
+                
+                const permissions = cordova.plugins.permissions;
+                
+                // מגדירים את כל ההרשאות שאנחנו צריכים
+                const requiredPermissions = [
+                    permissions.READ_EXTERNAL_STORAGE,
+                    permissions.WRITE_EXTERNAL_STORAGE
+                ];
+                
+                // מבקשים כל הרשאה בנפרד
+                const requestAllPermissions = async () => {
+                    for (const permission of requiredPermissions) {
+                        try {
+                            const checkResult = await new Promise((resolve, reject) => {
+                                permissions.checkPermission(permission, status => {
+                                    resolve(status);
+                                }, error => {
+                                    console.error("שגיאה בבדיקת הרשאה:", error);
+                                    reject(error);
+                                });
+                            });
+                            
+                            if (!checkResult.hasPermission) {
+                                console.log(`מבקש הרשאה: ${permission}`);
+                                const requestResult = await new Promise((resolve, reject) => {
+                                    permissions.requestPermission(permission, status => {
+                                        resolve(status);
+                                    }, error => {
+                                        console.error("שגיאה בבקשת הרשאה:", error);
+                                        reject(error);
+                                    });
+                                });
+                                
+                                if (!requestResult.hasPermission) {
+                                    throw new Error(`לא ניתנה הרשאה: ${permission}`);
+                                }
+                            }
+                        } catch (error) {
+                            console.error("שגיאה בבקשת הרשאות:", error);
+                            throw error;
+                        }
+                    }
+                };
+                
+                // יוצרים פונקציה חלופית שבודקת אם זה Android 10 ומעלה
+                const tryRequestLegacyStorage = async () => {
+                    if (typeof cordova.InAppBrowser !== 'undefined') {
+                        // פתרון חלופי: ננסה להשתמש בתיקייה פנימית
+                        console.log("מנסה להשתמש בתיקייה פנימית במקום");
+                        return true;
+                    }
+                    return false;
+                };
+                
+                // ננסה לבקש את כל ההרשאות
+                requestAllPermissions()
+                    .then(() => {
+                        console.log("כל ההרשאות התקבלו בהצלחה");
+                        showToast("הרשאות אחסון התקבלו", "success");
+                        resolve();
+                    })
+                    .catch(async (error) => {
+                        console.error("שגיאה בבקשת הרשאות:", error);
+                        
+                        // ננסה דרך חלופית
+                        const legacySuccess = await tryRequestLegacyStorage();
+                        if (legacySuccess) {
+                            resolve();
+                        } else {
+                            showToast("לא ניתן לקבל הרשאות אחסון. ייתכן שקובץ ייוצא לתיקייה פנימית של האפליקציה.", "warning");
+                            resolve(); // נמשיך בכל מקרה ונשתמש בתיקייה פנימית
+                        }
+                    });
+            } else if (typeof navigator !== 'undefined' && navigator.permissions) {
+                // אלטרנטיבה לאפליקציות שאינן משתמשות ב-cordova
+                console.log("מנסה לבקש הרשאות דרך navigator.permissions");
+                
+                navigator.permissions.query({ name: 'storage-access' })
+                    .then(result => {
+                        if (result.state === 'granted') {
+                            resolve();
+                        } else if (result.state === 'prompt') {
+                            showToast('אנא אשר את הרשאות האחסון', 'info');
+                            resolve();
+                        } else {
+                            showToast('לא ניתן לקבל הרשאות אחסון. הקובץ ייתכן שיישמר במיקום אחר.', 'warning');
+                            resolve(); // נמשיך בכל מקרה
+                        }
+                    })
+                    .catch(error => {
+                        // אם אין תמיכה בבדיקת הרשאות, ננסה בכל מקרה
+                        console.warn('שגיאה בבדיקת הרשאות:', error);
+                        resolve();
+                    });
+            } else {
+                // אם אין תמיכה בבדיקת הרשאות, נמשיך ונקווה לטוב
+                console.log("אין אפשרות לבקש הרשאות, ממשיכים בלעדיהן");
+                resolve();
+            }
+        });
     }
 
     // ייבוא נתונים מקובץ JSON
@@ -1775,8 +2073,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // מוסיף פרמטר נוסף true עבור חלון האזהרה המיוחד
         showDeleteConfirmation('האם אתה בטוח שברצונך למחוק את כל הנתונים? פעולה זו אינה ניתנת לביטול!', () => {
             showDeleteConfirmation('אזהרה אחרונה: כל הנתונים יימחקו לצמיתות. האם להמשיך?', () => {
-                // גיבוי אוטומטי לפני מחיקה
-                exportData();
+                // גיבוי שקט לפני מחיקה - שימוש בפונקציה פנימית במקום exportData
+                silentBackupBeforeReset();
                 
                 // מחיקת כל הנתונים מ-localStorage
                 localStorage.clear();
@@ -1790,9 +2088,75 @@ document.addEventListener('DOMContentLoaded', function() {
             }, true);
         }, true);
     }
+    
+    // פונקציה לגיבוי שקט לפני איפוס
+    function silentBackupBeforeReset() {
+        try {
+            // איסוף כל הנתונים מה-localStorage
+            const data = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                try {
+                    data[key] = JSON.parse(localStorage.getItem(key));
+                } catch (e) {
+                    data[key] = localStorage.getItem(key);
+                }
+            }
+            
+            // בדיקה אם יש נתונים לשמור
+            if (Object.keys(data).length === 0) {
+                console.log("אין נתונים לגיבוי לפני איפוס");
+                return;
+            }
+            
+            // יצירת מחרוזת JSON
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            // שימוש ב-localStorage לשמירת גיבוי אחרון
+            try {
+                localStorage.setItem('_lastBackupBeforeReset', dataStr);
+            } catch (e) {
+                console.error("שגיאה בשמירת גיבוי ב-localStorage:", e);
+            }
+            
+            // שמירת קובץ בשקט ברקע
+            if (typeof cordova !== 'undefined' && cordova.file) {
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                const fileName = `mytrip-reset-backup-${timestamp}.json`;
+                
+                // ניסיון לשמור בתיקייה פנימית של האפליקציה
+                if (cordova.file.dataDirectory) {
+                    window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dirEntry) {
+                        dirEntry.getFile(fileName, { create: true, exclusive: false }, function(fileEntry) {
+                            fileEntry.createWriter(function(writer) {
+                                writer.onwriteend = function() {
+                                    console.log(`גיבוי שקט נשמר ב: ${fileEntry.nativeURL || fileEntry.fullPath}`);
+                                };
+                                writer.write(dataBlob);
+                            });
+                        });
+                    });
+                }
+            } else if (typeof window !== 'undefined') {
+                // שמירה בזיכרון המטמון של הדפדפן
+                if (sessionStorage) {
+                    try {
+                        sessionStorage.setItem('_lastBackupBeforeReset', dataStr);
+                    } catch (e) {
+                        console.error("שגיאה בשמירת גיבוי ב-sessionStorage:", e);
+                    }
+                }
+            }
+            
+            console.log("בוצע גיבוי שקט לפני איפוס");
+        } catch (e) {
+            console.error("שגיאה בביצוע גיבוי שקט:", e);
+        }
+    }
 
     // הצגת הודעה למשתמש
-    function showToast(message, type = 'success') {
+    function showToast(message, type = 'success', duration = 3000) {
         // בדיקה אם יש כבר אלמנט toast
         let toast = document.querySelector('.toast');
         
@@ -1812,10 +2176,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // הצגת ההודעה
         toast.classList.add('show');
         
-        // הסרת ההודעה אחרי 3 שניות
+        // הסרת ההודעה אחרי הזמן שהוגדר
         setTimeout(() => {
             toast.classList.remove('show');
-        }, 3000);
+        }, duration);
     }
 
     // אתחול הגדרות
@@ -1939,5 +2303,37 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('#confirm-delete-modal .close-btn').addEventListener('click', handleCancel);
         document.addEventListener('keydown', handleKeyPress);
         modal.addEventListener('click', handleModalClick);
+    }
+
+    // פונקציית עזר לפתיחת הקובץ שיוצא
+    function openExportedFile(fileEntry) {
+        // ננסה לפתוח את הקובץ שנשמר אם יש לנו את הפלאגין המתאים
+        if (typeof cordova !== 'undefined' && cordova.plugins && cordova.plugins.fileOpener2) {
+            try {
+                const filePath = fileEntry.nativeURL || fileEntry.fullPath;
+                console.log(`מנסה לפתוח את הקובץ: ${filePath}`);
+                
+                cordova.plugins.fileOpener2.open(
+                    filePath,
+                    'application/json',
+                    {
+                        error: function(e) {
+                            console.error('שגיאה בפתיחת הקובץ:', e);
+                            showToast('לא ניתן לפתוח את הקובץ אוטומטית. הקובץ נמצא ב: ' + filePath, 'warning', 8000);
+                        },
+                        success: function() {
+                            console.log('הקובץ נפתח בהצלחה');
+                        }
+                    }
+                );
+            } catch (err) {
+                console.error('שגיאה בניסיון לפתוח את הקובץ:', err);
+                showToast('אירעה שגיאה בפתיחת הקובץ. נסה לגשת אליו דרך מנהל הקבצים.', 'warning');
+            }
+        } else {
+            const filePath = fileEntry.nativeURL || fileEntry.fullPath;
+            console.log('אין אפשרות לפתוח את הקובץ אוטומטית. נתיב הקובץ:', filePath);
+            showToast('הקובץ נשמר ב: ' + filePath, 'info', 8000);
+        }
     }
 }); 
