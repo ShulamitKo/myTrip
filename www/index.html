@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>הטיול שלי</title>
+    <title>MyTrip</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4a6da7">
@@ -218,7 +218,7 @@
         <div class="empty-state" id="empty-places-state">
             <i class="fas fa-map-marked-alt"></i>
             <h3>אין מקומות לביקור</h3>
-            <p>הוסף מקומות שתרצה לבקר בהם בבודפשט</p>
+            <p>הוסף מקומות שתרצה לבקר בהם במהלך הטיול</p>
         </div>
         
         <!-- מודאל עריכת מקום -->
@@ -529,11 +529,7 @@
                         <input type="text" id="edit-info-title" required>
                     </div>
                     <div class="form-group">
-                        <label for="edit-info-content">תוכן</label>
-                        <textarea id="edit-info-content" rows="4" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit-info-icon">אייקון</label>
+                        <label for="edit-info-icon">אייקון כותרת</label>
                         <select id="edit-info-icon">
                             <option value="info-circle">מידע כללי</option>
                             <option value="money-bill-wave">כספים</option>
@@ -550,6 +546,17 @@
                             <option value="passport">דרכון</option>
                         </select>
                     </div>
+                    
+                    <div class="form-group">
+                        <label>פריטי מידע</label>
+                        <div id="info-items-container">
+                            <!-- כאן ייווצרו שורות המידע באופן דינמי -->
+                        </div>
+                        <button type="button" id="add-info-item-btn" class="btn secondary-btn">
+                            <i class="fas fa-plus"></i> הוסף פריט מידע
+                        </button>
+                    </div>
+                    
                     <div class="form-actions">
                         <button type="submit" class="btn primary-btn">שמור</button>
                         <button type="button" class="btn close-modal">ביטול</button>
@@ -590,8 +597,9 @@
                 
                 <div class="settings-item">
                     <h3>אודות</h3>
-                    <p>הטיול שלי - גרסה 1.0.0</p>
+                    <p>MyTrip - גרסה 1.0.0</p>
                     <p>אפליקציה לניהול הטיול שלך</p>
+                    <p><a href="privacy_policy.html" id="privacy-policy-link" target="_blank">מדיניות פרטיות</a></p>
                 </div>
             </div>
         </div>

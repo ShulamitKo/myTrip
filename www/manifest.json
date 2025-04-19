@@ -1,6 +1,6 @@
 {
-  "name": "הטיול שלי",
-  "short_name": "הטיול שלי",
+  "name": "MyTrip",
+  "short_name": "MyTrip",
   "description": "אפליקציה לניהול הטיול שלך",
   "start_url": "/",
   "display": "standalone",

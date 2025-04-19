@@ -1946,38 +1946,41 @@ header p {
     background-color: #c0392b;
 }
 
-/* Toast הודעות */
+/* Toast notifications */
 .toast {
     position: fixed;
-    bottom: 80px;
+    bottom: 20px;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(100px);
     background-color: #333;
     color: white;
-    padding: 12px 20px;
-    border-radius: 4px;
-    z-index: 1000;
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1100;
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: all 0.3s ease;
+    font-size: 14px;
     max-width: 80%;
     text-align: center;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
 
 .toast.show {
+    transform: translateX(-50%) translateY(0);
     opacity: 1;
 }
 
 .toast.success {
-    background-color: #2ecc71;
+    background-color: #28a745;
 }
 
 .toast.error {
-    background-color: #e74c3c;
+    background-color: #dc3545;
 }
 
 .toast.warning {
-    background-color: #f39c12;
+    background-color: #ffc107;
+    color: #333;
 }
 
 /* סגנונות לסינון עדיפויות */
@@ -2318,4 +2321,213 @@ header p {
     font-size: 1rem;
     min-width: 120px;
     border-radius: 6px;
+}
+
+/* קישור מדיניות פרטיות */
+#privacy-policy-link {
+    color: #4a6da7;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    margin-top: 5px;
+}
+
+#privacy-policy-link:hover {
+    text-decoration: underline;
+}
+
+#privacy-policy-link:before {
+    content: "\f05a";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-left: 6px;
+    font-size: 0.9em;
+}
+
+/* עיצוב שורות מידע */
+.info-item-row {
+    margin-bottom: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 8px;
+    background-color: #f9f9f9;
+}
+
+.info-item-inputs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-item-icon {
+    flex: 0 0 auto;
+    min-width: 120px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+}
+
+.info-item-text {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.remove-info-item-btn {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.remove-info-item-btn:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+#add-info-item-btn {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+    padding: 8px;
+    background-color: #f5f5f5;
+    border: 1px dashed #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#add-info-item-btn:hover {
+    background-color: #e9ecef;
+}
+
+/* עיצוב שורות מידע בכרטיס מידע */
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 6px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.info-row:hover {
+    background-color: #f5f5f5;
+}
+
+.info-row-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.info-row-actions {
+    display: flex;
+    gap: 4px;
+    opacity: 0.4;
+    transition: opacity 0.2s ease;
+}
+
+.info-row:hover .info-row-actions {
+    opacity: 1;
+}
+
+.edit-row-btn, .delete-row-btn {
+    background: none;
+    border: none;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.edit-row-btn:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    color: #007bff;
+}
+
+.delete-row-btn:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+.info-title {
+    position: relative;
+    padding-left: 32px;
+}
+
+.edit-title-inline {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    color: #666;
+    opacity: 0.4;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.info-title:hover .edit-title-inline {
+    opacity: 1;
+}
+
+.edit-title-inline:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    color: #007bff;
+}
+
+/* מודאל עריכה מיידי */
+.inline-edit-modal {
+    z-index: 1050;
+}
+
+.inline-edit-modal .modal-content {
+    max-width: 350px;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.inline-edit-modal.show .modal-content {
+    animation: modalFadeIn 0.2s ease-out forwards;
+}
+
+/* התאמות למובייל */
+@media (max-width: 480px) {
+    .info-row {
+        padding: 6px 4px;
+    }
+    
+    .edit-row-btn, .delete-row-btn, .edit-title-inline {
+        width: 24px;
+        height: 24px;
+        font-size: 0.8rem;
+    }
+    
+    .info-title {
+        padding-left: 24px;
+    }
 } 
