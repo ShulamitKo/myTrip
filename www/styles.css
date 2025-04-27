@@ -1,10 +1,18 @@
 :root {
     --primary-color: #4a6da7;
     --secondary-color: #8e44ad;
+    --accent-color: #ffc107;
+    --background-color: #f0f4f8;
+    --text-color: #3a3f51;
+    --border-color: #ddd;
     --light-color: #f8f9fa;
     --dark-color: #343a40;
     --success-color: #28a745;
     --danger-color: #dc3545;
+    --safe-area-top: env(safe-area-inset-top);
+    --safe-area-bottom: env(safe-area-inset-bottom);
+    --safe-area-left: env(safe-area-inset-left);
+    --safe-area-right: env(safe-area-inset-right);
 }
 
 * {
@@ -15,19 +23,24 @@
 }
 
 body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
     background-color: #f0f2f5;
     color: var(--dark-color);
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     padding-bottom: 100px;
 }
 
 header {
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: white;
-    padding: 1rem;
     text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: calc(1rem + var(--safe-area-top)) calc(1rem + var(--safe-area-right)) 1rem calc(1rem + var(--safe-area-left));
     position: relative;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 header h1 {
@@ -395,7 +408,7 @@ header p {
     background-color: white;
     display: flex;
     justify-content: space-around;
-    padding: 0.8rem 0 1.2rem 0;
+    padding: 0.8rem 0 calc(1.2rem + var(--safe-area-bottom)) 0;
     box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
     z-index: 99;
 }
@@ -1734,8 +1747,8 @@ header p {
 
 .settings-btn {
     position: absolute;
-    left: 15px;
-    top: 15px;
+    left: calc(15px + var(--safe-area-left));
+    top: calc(15px + var(--safe-area-top));
     background: none;
     border: none;
     color: white;
@@ -1770,6 +1783,9 @@ header p {
     height: 35px;
     background-color: rgba(255, 255, 255, 0.1);
     margin-left: 8px;
+    position: absolute;
+    top: calc(15px + var(--safe-area-top));
+    right: calc(15px + var(--safe-area-right));
 }
 
 .edit-title-btn:hover {
@@ -1812,7 +1828,7 @@ header p {
 
 .app-footer {
     background-color: white;
-    padding: 0.3rem;
+    padding: 0.3rem 0 calc(0.3rem + var(--safe-area-bottom)) 0;
     text-align: center;
     font-size: 0.8rem;
     border-top: 1px solid var(--border-color);
@@ -1849,6 +1865,7 @@ header p {
     transition: transform 0.2s ease;
     display: flex;
     align-items: center;
+    margin-bottom: var(--safe-area-bottom);
 }
 
 .whatsapp-link:hover {
@@ -1857,13 +1874,14 @@ header p {
 
 @media (max-width: 480px) {
     .app-footer {
-        padding: 0.2rem;
+        padding: 0.2rem 0 calc(0.2rem + var(--safe-area-bottom)) 0;
         font-size: 0.7rem;
         height: 25px;
     }
 
     .whatsapp-link {
         font-size: 1rem;
+        margin-bottom: var(--safe-area-bottom);
     }
 
     body {
@@ -1872,7 +1890,7 @@ header p {
 
     .nav-bar {
         bottom: 25px;
-        padding: 0.6rem 0 0.8rem 0;
+        padding: 0.6rem 0 calc(0.8rem + var(--safe-area-bottom)) 0;
     }
 }
 

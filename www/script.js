@@ -1,4 +1,7 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
+    // אתחול אזורים בטוחים עבור מכשירים מודרניים
+    initializeDeviceCompat();
+    
     console.log('DOM Content Loaded');
     
     // הוספת title לכפתורי התפריט התחתון ולשוניות העליונות
@@ -2919,4 +2922,56 @@ document.addEventListener('DOMContentLoaded', function() {
             showToast('הקובץ נשמר ב: ' + filePath, 'info', 8000);
         }
     }
-}); 
+});
+
+// פונקציה לאתחול הפלאגינים והתאמות למכשירים מודרניים
+async function initializeDeviceCompat() {
+    // בדיקה אם אנחנו במכשיר מובייל (הפלאגינים פעילים)
+    document.addEventListener('deviceready', async () => {
+        try {
+            // אתחול סרגל הסטטוס
+            const { StatusBar } = await import('@capacitor/status-bar');
+            if (StatusBar) {
+                // הגדרת סגנון שקוף לסרגל הסטטוס
+                StatusBar.setStyle({ style: 'LIGHT' });
+                // שימוש בצבע הראשי של האפליקציה
+                StatusBar.setBackgroundColor({ color: '#8e44ad' });
+                
+                // טיפול באייפונים עם notch
+                if (window.Capacitor && window.Capacitor.getPlatform() === 'ios') {
+                    StatusBar.setOverlaysWebView({ overlay: true });
+                }
+            }
+            
+            // אתחול הפלאגין של אזורים בטוחים
+            const { SafeArea } = await import('capacitor-plugin-safe-area');
+            if (SafeArea) {
+                // עדכון של משתני ה-CSS אם אין תמיכה מובנית
+                const insets = await SafeArea.getSafeAreaInsets();
+                if (insets) {
+                    // עדכון משתני CSS עם הערכים מהפלאגין אם env() לא נתמך
+                    document.documentElement.style.setProperty('--safe-area-top', `${insets.top}px`);
+                    document.documentElement.style.setProperty('--safe-area-bottom', `${insets.bottom}px`);
+                    document.documentElement.style.setProperty('--safe-area-left', `${insets.left}px`);
+                    document.documentElement.style.setProperty('--safe-area-right', `${insets.right}px`);
+                }
+            }
+        } catch (error) {
+            console.log('Device plugins not available:', error);
+            
+            // כאשר הפלאגינים לא זמינים, השתמש בערכי ברירת מחדל
+            document.documentElement.style.setProperty('--safe-area-top', '0px');
+            document.documentElement.style.setProperty('--safe-area-bottom', '0px');
+            document.documentElement.style.setProperty('--safe-area-left', '0px');
+            document.documentElement.style.setProperty('--safe-area-right', '0px');
+        }
+    }, false);
+    
+    // כאשר מריצים בדפדפן (ללא capacitor)
+    if (typeof window.Capacitor === 'undefined') {
+        document.documentElement.style.setProperty('--safe-area-top', '0px');
+        document.documentElement.style.setProperty('--safe-area-bottom', '0px');
+        document.documentElement.style.setProperty('--safe-area-left', '0px');
+        document.documentElement.style.setProperty('--safe-area-right', '0px');
+    }
+} 
