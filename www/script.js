@@ -654,7 +654,17 @@ document.addEventListener('DOMContentLoaded', function() {
             renderSchedule();
             
             scheduleInput.value = '';
-            scheduleTime.value = '';
+            
+            // חישוב השעה הבאה, שעה אחת אחרי הפעילות שנוספה
+            const [hours, minutes] = timeValue.split(':');
+            const date = new Date();
+            date.setHours(parseInt(hours));
+            date.setMinutes(parseInt(minutes));
+            date.setHours(date.getHours() + 1);
+            
+            // עדכון השעה לשעה הבאה
+            const nextHour = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+            scheduleTime.value = nextHour;
         }
     }
     
@@ -737,6 +747,9 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('All schedule items in localStorage:', scheduleManager.getAllItems());
         activities.sort((a, b) => a.time.localeCompare(b.time));
         
+        // עדכון שעת ברירת המחדל לשעה אחרי הפעילות האחרונה
+        updateDefaultScheduleTime(activities);
+        
         if (activities.length === 0) {
             scheduleList.style.display = 'none';
             emptyScheduleState.style.display = 'block';
@@ -791,6 +804,34 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 scheduleList.appendChild(timeBlock);
             });
+        }
+    }
+    
+    // פונקציה לעדכון שעת ברירת המחדל בלו"ז
+    function updateDefaultScheduleTime(activities) {
+        if (activities.length > 0) {
+            // מיון הפעילויות לפי זמן
+            const sortedActivities = [...activities].sort((a, b) => a.time.localeCompare(b.time));
+            // קבלת הפעילות האחרונה
+            const lastActivity = sortedActivities[sortedActivities.length - 1];
+            
+            // חישוב שעה אחת אחרי הפעילות האחרונה
+            const [hours, minutes] = lastActivity.time.split(':');
+            const date = new Date();
+            date.setHours(parseInt(hours));
+            date.setMinutes(parseInt(minutes));
+            
+            // הוספת שעה אחת
+            date.setHours(date.getHours() + 1);
+            
+            // פורמט השעה לתצוגה
+            const nextHour = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+            
+            // עדכון שדה השעה
+            scheduleTime.value = nextHour;
+        } else {
+            // אם אין פעילויות, השעה תהיה 09:00 כברירת מחדל
+            scheduleTime.value = "09:00";
         }
     }
     
@@ -967,6 +1008,14 @@ document.addEventListener('DOMContentLoaded', function() {
             return; // אם נמצאים במצב עריכה, לא להפעיל את פונקציית ההוספה
         }
         addScheduleItem();
+    });
+    
+    // הוספת מאזין אירועים ללחיצה על Enter בתיבת הטקסט של לו"ז
+    scheduleInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !addScheduleBtn.classList.contains('editing')) {
+            e.preventDefault();
+            addScheduleItem();
+        }
     });
     
     // טיפול בטפסים
@@ -2735,7 +2784,7 @@ document.addEventListener('DOMContentLoaded', function() {
         this.classList.add('active');
         activeDay = this.dataset.day;
         console.log('Active day changed to:', activeDay);
-        renderSchedule();
+        renderSchedule(); // זה יעדכן גם את השעה הדיפולטיבית דרך renderSchedule
     }
 
     // התחלת האזנה לכפתורי היום הקיימים

@@ -15,13 +15,13 @@
     <header>
         <div class="header-content">
             <div class="title-container">
-                <button class="edit-title-btn" onclick="editTitle()">
+                <button class="edit-title-btn" onclick="editTitle()" title="ערוך את כותרת הטיול">
                     <i class="fas fa-edit"></i>
                 </button>
                 <h1 id="appTitle">הטיול שלי</h1>
             </div>
             <p><i class="fas fa-map-marker-alt"></i> המדריך האישי שלך</p>
-            <button id="settingsBtn" class="settings-btn">
+            <button id="settingsBtn" class="settings-btn" title="פתח הגדרות האפליקציה">
                 <i class="fas fa-cog"></i>
             </button>
         </div>
@@ -39,7 +39,7 @@
     <div class="tab-content active" id="tasks">
         <div class="add-item">
             <input type="text" id="taskInput" placeholder="הוסף משימה חדשה...">
-            <button id="addTaskBtn"><i class="fas fa-plus"></i></button>
+            <button id="addTaskBtn" title="הוסף משימה חדשה"><i class="fas fa-plus"></i></button>
         </div>
         
         <div class="filter-options">
@@ -101,7 +101,7 @@
     <div class="tab-content" id="shopping">
         <div class="add-item">
             <input type="text" id="shoppingInput" placeholder="הוסף פריט לרשימת הקניות...">
-            <button id="addShoppingBtn"><i class="fas fa-plus"></i></button>
+            <button id="addShoppingBtn" title="הוסף פריט לרשימת הקניות"><i class="fas fa-plus"></i></button>
         </div>
         
         <div class="section-title">
@@ -179,7 +179,7 @@
     <div class="tab-content" id="places">
         <div class="add-item">
             <input type="text" id="place-input" placeholder="הוסף מקום לביקור...">
-            <button id="add-place-btn"><i class="fas fa-plus"></i></button>
+            <button id="add-place-btn" title="הוסף מקום חדש"><i class="fas fa-plus"></i></button>
         </div>
         
         <div class="section-title">
@@ -283,7 +283,7 @@
     <div class="tab-content" id="food">
         <div class="add-item">
             <input type="text" id="foodInput" placeholder="הוסף מסעדה או מקום אוכל...">
-            <button id="addFoodBtn"><i class="fas fa-plus"></i></button>
+            <button id="addFoodBtn" title="הוסף מסעדה או מקום אוכל"><i class="fas fa-plus"></i></button>
         </div>
         
         <div class="section-title">
@@ -418,7 +418,7 @@
                 <button class="day-btn" data-day="3">יום 3</button>
                 <button class="day-btn active" data-day="4">יום 4</button>
                 <button class="day-btn" data-day="5">יום 5</button>
-                <button class="add-day-btn"><i class="fas fa-plus"></i></button>
+                <button class="add-day-btn" title="הוסף יום חדש"><i class="fas fa-plus"></i></button>
             </div>
             
             <div class="schedule-day-title">
@@ -428,9 +428,9 @@
             
             <div class="schedule-day" id="scheduleContent">
                 <div class="add-item">
-                    <input type="time" id="scheduleTime" value="09:00">
+                    <input type="time" id="scheduleTime">
                     <input type="text" id="scheduleInput" placeholder="הוסף פעילות ללו״ז...">
-                    <button id="addScheduleBtn"><i class="fas fa-plus"></i></button>
+                    <button id="addScheduleBtn" title="הוסף פעילות חדשה ללו״ז"><i class="fas fa-plus"></i></button>
                 </div>
                 
                 <div class="item-list" id="scheduleList">
@@ -499,7 +499,7 @@
     <div class="tab-content" id="info">
         <div class="add-item">
             <input type="text" id="infoInput" placeholder="הוסף כותרת למידע חדש...">
-            <button id="addInfoBtn"><i class="fas fa-plus"></i></button>
+            <button id="addInfoBtn" title="הוסף כרטיס מידע חדש"><i class="fas fa-plus"></i></button>
         </div>
 
         <div class="section-title">
@@ -577,10 +577,10 @@
                     <h3>גיבוי ושחזור נתונים</h3>
                     <p>ייצא את כל הנתונים שלך לקובץ או ייבא נתונים מקובץ קיים.</p>
                     <div class="settings-actions">
-                        <button id="exportDataBtn" class="btn primary-btn">
+                        <button id="exportDataBtn" class="btn primary-btn" title="שמור את כל הנתונים שלך לקובץ">
                             <i class="fas fa-file-export"></i> ייצוא נתונים
                         </button>
-                        <button id="importDataBtn" class="btn secondary-btn">
+                        <button id="importDataBtn" class="btn secondary-btn" title="טען נתונים מקובץ מגיבוי">
                             <i class="fas fa-file-import"></i> ייבוא נתונים
                         </button>
                         <input type="file" id="importFileInput" style="display: none;" accept=".json">
@@ -590,7 +590,7 @@
                 <div class="settings-item">
                     <h3>מחיקת נתונים</h3>
                     <p>מחק את כל הנתונים ואפס את האפליקציה. פעולה זו אינה ניתנת לביטול!</p>
-                    <button id="resetAppBtn" class="btn danger-btn">
+                    <button id="resetAppBtn" class="btn danger-btn" title="מחק את כל הנתונים ואפס את האפליקציה">
                         <i class="fas fa-trash-alt"></i> מחק את כל הנתונים
                     </button>
                 </div>
@@ -599,7 +599,7 @@
                     <h3>אודות</h3>
                     <p>MyTrip - גרסה 1.0.0</p>
                     <p>אפליקציה לניהול הטיול שלך</p>
-                    <p><a href="privacy_policy.html" id="privacy-policy-link" target="_blank">מדיניות פרטיות</a></p>
+                    <p><a href="privacy_policy.html" id="privacy-policy-link" target="_blank" title="מדיניות הפרטיות של האפליקציה (יפתח בחלון חדש)">מדיניות פרטיות</a></p>
                 </div>
             </div>
         </div>

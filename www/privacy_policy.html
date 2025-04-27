@@ -18,13 +18,51 @@
         .section {
             margin-bottom: 20px;
         }
+        #closeBtn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #4a6da7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+        }
+        #closeBtn:hover {
+            background-color: #3a5a8a;
+        }
+        #closeBtn:focus {
+            outline: 3px solid #ffcc00;
+            box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.5);
+        }
+        #closeBtn::before {
+            content: "×";
+            margin-left: 5px;
+            font-size: 20px;
+        }
     </style>
 </head>
 <body>
+    <button id="closeBtn" onclick="window.close();" aria-label="סגור את חלון מדיניות הפרטיות">סגור</button>
     <h1>מדיניות פרטיות - MyTrip</h1>
     <p>עדכון אחרון: <span id="last-updated"></span></p>
     <script>
         document.getElementById('last-updated').textContent = new Date().toLocaleDateString('he-IL');
+        
+        // אם window.close() לא עובד (בחלק מהדפדפנים זה לא מאופשר)
+        document.getElementById('closeBtn').addEventListener('click', function() {
+            // אם הדף נפתח בתוך האפליקציה
+            if (window.history.length > 1) {
+                window.history.back();
+            }
+        });
     </script>
 
     <div class="section">
