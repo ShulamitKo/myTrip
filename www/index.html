@@ -419,6 +419,7 @@
                 <button class="day-btn active" data-day="4">יום 4</button>
                 <button class="day-btn" data-day="5">יום 5</button>
                 <button class="add-day-btn" title="הוסף יום חדש"><i class="fas fa-plus"></i></button>
+                <button class="edit-days-btn" title="ערוך ימים"><i class="fas fa-cog"></i></button>
             </div>
             
             <div class="schedule-day-title">
@@ -625,6 +626,28 @@
                 <button id="confirm-delete-confirm" class="btn primary-btn" title="אישור מחיקה">
                     <i class="fas fa-trash-alt"></i> מחק
                 </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- מודאל עריכת ימים -->
+    <div id="edit-days-modal" class="modal edit-days-modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>ניהול ימים</h3>
+            <p>גרור את הימים כדי לשנות את הסדר, ערוך את השמות, או מחק ימים לא נחוצים.</p>
+            
+            <ul id="days-list" class="days-list">
+                <!-- רשימת הימים תיווצר דינמית -->
+            </ul>
+            
+            <button id="add-day-item-btn" class="add-day-item-btn">
+                <i class="fas fa-plus"></i> הוסף יום חדש
+            </button>
+            
+            <div class="edit-days-footer">
+                <button id="save-days-btn" class="btn primary-btn">שמור שינויים</button>
+                <button id="cancel-days-btn" class="btn">ביטול</button>
             </div>
         </div>
     </div>

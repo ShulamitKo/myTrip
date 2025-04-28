@@ -90,6 +90,72 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    // מנהל הימים - מחלקה חדשה לטיפול בשמירת הימים
+    class DaysManager extends ItemManager {
+        constructor() {
+            super('days');
+            // וידוא שיש ימים ברירת מחדל
+            if (this.items.length === 0) {
+                this.initDefaultDays();
+            }
+        }
+        
+        initDefaultDays() {
+            // הוספת ימים ברירת מחדל (ימים 1-5)
+            for (let i = 1; i <= 5; i++) {
+                this.addItem({
+                    id: i.toString(),
+                    number: i,
+                    name: `יום ${i}`,
+                    order: i
+                });
+            }
+        }
+        
+        getDays() {
+            // מחזיר את הימים ממוינים לפי סדר
+            return this.getAllItems().sort((a, b) => a.order - b.order);
+        }
+        
+        addDay(dayName = null) {
+            // מציאת המספר הבא לפי הימים הקיימים
+            const maxNumber = Math.max(...this.getAllItems().map(day => day.number), 0);
+            const newNumber = maxNumber + 1;
+            
+            const newDay = {
+                id: Date.now().toString(),
+                number: newNumber,
+                name: dayName || `יום ${newNumber}`,
+                order: this.getAllItems().length + 1
+            };
+            
+            this.addItem(newDay);
+            return newDay;
+        }
+        
+        updateDayOrder(days) {
+            // עדכון סדר הימים בהתאם למערך שהתקבל
+            days.forEach((day, index) => {
+                this.updateItem(day.id, { order: index + 1 });
+            });
+        }
+        
+        deleteDay(dayId) {
+            this.deleteItem(dayId);
+            // יש לעדכן מחדש את סדר הימים
+            const remainingDays = this.getDays();
+            this.updateDayOrder(remainingDays);
+        }
+        
+        getDayById(dayId) {
+            return this.getAllItems().find(day => day.id === dayId);
+        }
+        
+        getDayByNumber(number) {
+            return this.getAllItems().find(day => day.number.toString() === number.toString());
+        }
+    }
+    
     // מנהל משימות
     class TaskManager extends ItemManager {
         constructor() {
@@ -146,6 +212,19 @@ document.addEventListener('DOMContentLoaded', () => {
             // מחזיר רשימה מסוננת לפי המאפיין והערך שהתקבלו
             return this.items.filter(item => item[property] === value);
         }
+        
+        updateItemsDay(oldDayNumber, newDayNumber) {
+            // עדכון כל הפעילויות של יום מסוים ליום אחר
+            this.items
+                .filter(item => item.day === oldDayNumber.toString())
+                .forEach(item => {
+                    this.updateItem(item.id, { day: newDayNumber.toString() });
+                });
+        }
+        
+        getActivitiesForDay(dayNumber) {
+            return this.getFilteredItems('day', dayNumber.toString());
+        }
     }
     
     // יצירת מנהלי נתונים
@@ -155,6 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const shoppingManager = new ShoppingManager();
     const foodManager = new FoodManager();
     const infoManager = new InfoManager();
+    const daysManager = new DaysManager(); // יצירת מנהל ימים
     
     // אלמנטים של DOM
     // לשונית מקומות
@@ -196,6 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const emptyScheduleState = document.getElementById('emptyScheduleState');
     const dayButtons = document.querySelectorAll('.day-btn');
     const addDayBtn = document.querySelector('.add-day-btn');
+    const editDaysBtn = document.querySelector('.edit-days-btn');
     
     const infoInput = document.getElementById('infoInput');
     const addInfoBtn = document.getElementById('addInfoBtn');
@@ -203,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     console.log('Info elements:', { infoInput, addInfoBtn, infoList });
     
-    let activeDay = '4'; // יום ברירת מחדל
+    let activeDay = localStorage.getItem('activeDay') || '1'; // טעינת היום הפעיל מהלוקל סטורג', או 1 כברירת מחדל
     let activeFilter = 'active'; // שינוי ברירת המחדל ל'משימות פעילות'
     
     // מעבר בין לשוניות
@@ -909,9 +990,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function closeAllModals() {
-        console.log('Closing all modals');
-        const modals = document.querySelectorAll('.modal');
-        modals.forEach(modal => {
+        document.querySelectorAll('.modal').forEach(modal => {
             modal.classList.remove('show');
         });
     }
@@ -1389,6 +1468,9 @@ document.addEventListener('DOMContentLoaded', () => {
     renderPlaces();
     renderFood();
     renderInfo();
+    
+    // עדכון ממשק הימים לפי מנהל הימים
+    updateDayButtons();
     
     // הגדרת הכפתור הפעיל בלשונית לו"ז
     document.querySelectorAll('.day-btn').forEach(btn => {
@@ -2196,27 +2278,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     addDayBtn.addEventListener('click', () => {
-        // מקבלים את הרשימה המעודכנת של כפתורי יום
-        const currentDayButtons = document.querySelectorAll('.day-btn');
-        const dayCount = currentDayButtons.length;
-        const newDayNum = dayCount + 1;
+        // יצירת יום חדש עם המנהל החדש
+        const newDay = daysManager.addDay();
         
-        const newDayBtn = document.createElement('button');
-        newDayBtn.className = 'day-btn';
-        newDayBtn.dataset.day = newDayNum.toString();
-        newDayBtn.textContent = `יום ${newDayNum}`;
-        newDayBtn.title = `הצג לו"ז ליום ${newDayNum}`;
-        
-        // מוסיפים את הכפתור החדש לפני כפתור ה-+
-        addDayBtn.parentNode.insertBefore(newDayBtn, addDayBtn);
-        
-        // מעדכנים את מאזיני האירועים לכל הכפתורים
-        setupDayButtonEvents();
+        // עדכון ממשק המשתמש
+        updateDayButtons();
         
         // מעדכנים את היום הפעיל לחדש
-        document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
-        newDayBtn.classList.add('active');
-        activeDay = newDayNum.toString();
+        activeDay = newDay.number.toString();
+        // שמירת היום הפעיל ב-localStorage
+        localStorage.setItem('activeDay', activeDay);
+        
         console.log('Added new day button, active day is now:', activeDay);
         renderSchedule();
     });
@@ -2773,7 +2845,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // פונקציה להוספת מאזיני אירועים לכפתורי היום
     function setupDayButtonEvents() {
-        document.querySelectorAll('.day-btn').forEach(btn => {
+        document.querySelectorAll('.day-btn:not(.add-day-btn):not(.edit-days-btn)').forEach(btn => {
             // מוודאים שהכפתור לא כבר רשום לאירוע (למניעת רישום כפול)
             btn.removeEventListener('click', dayButtonClickHandler);
             btn.addEventListener('click', dayButtonClickHandler);
@@ -2786,8 +2858,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         activeDay = this.dataset.day;
+        
+        // שמירת היום הפעיל ב-localStorage
+        localStorage.setItem('activeDay', activeDay);
+        
         console.log('Active day changed to:', activeDay);
-        renderSchedule(); // זה יעדכן גם את השעה הדיפולטיבית דרך renderSchedule
+        renderSchedule(); // עדכון התצוגה לפי היום החדש
     }
 
     // התחלת האזנה לכפתורי היום הקיימים
@@ -2922,6 +2998,448 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast('הקובץ נשמר ב: ' + filePath, 'info', 8000);
         }
     }
+
+    // פונקציה לפתיחת מודאל עריכת ימים
+    function openEditDaysModal() {
+        // סגירת כל המודלים האחרים קודם
+        closeAllModals();
+        
+        const modal = document.getElementById('edit-days-modal');
+        const daysList = document.getElementById('days-list');
+        
+        // ניקוי הרשימה הקיימת
+        daysList.innerHTML = '';
+        
+        // קבלת כל הימים ממנהל הימים
+        const days = daysManager.getDays();
+        
+        // וידוא שיש ימים
+        if (days.length === 0) {
+            // במקרה הקיצוני שאין ימים, נוסיף יום ראשון אוטומטית
+            const defaultDay = daysManager.addDay('יום 1');
+            
+            // יצירת אלמנט ליום ברירת המחדל
+            const li = document.createElement('li');
+            li.className = 'day-item';
+            li.dataset.day = defaultDay.id;
+            li.dataset.number = defaultDay.number;
+            li.setAttribute('draggable', 'true');
+            li.innerHTML = `
+                <div class="day-handle">
+                    <i class="fas fa-grip-lines"></i>
+                </div>
+                <div class="day-name">${defaultDay.name}</div>
+                <div class="day-actions">
+                    <button class="day-btn day-edit-btn" title="ערוך יום">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="day-btn day-delete-btn" title="מחק יום">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            `;
+            
+            setupDragAndDropEvents(li);
+            attachEditEvent(li);
+            attachDeleteEvent(li);
+            
+            daysList.appendChild(li);
+        } else {
+            // יצירת פריטי יום מהימים הקיימים
+            days.forEach(day => {
+                const li = document.createElement('li');
+                li.className = 'day-item';
+                li.dataset.day = day.id;
+                li.dataset.number = day.number;
+                li.setAttribute('draggable', 'true');
+                li.innerHTML = `
+                    <div class="day-handle">
+                        <i class="fas fa-grip-lines"></i>
+                    </div>
+                    <div class="day-name">${day.name}</div>
+                    <div class="day-actions">
+                        <button class="day-btn day-edit-btn" title="ערוך יום">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="day-btn day-delete-btn" title="מחק יום">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                `;
+                
+                setupDragAndDropEvents(li);
+                attachEditEvent(li);
+                attachDeleteEvent(li);
+                
+                daysList.appendChild(li);
+            });
+        }
+        
+        // הצגת המודל
+        modal.classList.add('show');
+    }
+    
+    // פונקציה לחיבור אירוע עריכה לאלמנט יום
+    function attachEditEvent(dayElement) {
+        const editBtn = dayElement.querySelector('.day-edit-btn');
+        if (!editBtn) return;
+        
+        // מסיר אירועים קודמים למניעת כפילות
+        const clone = editBtn.cloneNode(true);
+        editBtn.parentNode.replaceChild(clone, editBtn);
+        
+        clone.addEventListener('click', function() {
+            const dayNameElement = dayElement.querySelector('.day-name');
+            if (!dayNameElement) return;
+            
+            const currentName = dayNameElement.textContent;
+            const dayId = dayElement.dataset.day;
+            
+            // החלפת שם היום לשדה קלט
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'day-input';
+            input.value = currentName;
+            input.dataset.originalName = currentName;
+            input.dataset.dayId = dayId;
+            dayNameElement.replaceWith(input);
+            input.focus();
+            
+            // הוספת אירוע עבור השלמת העריכה
+            input.addEventListener('blur', () => {
+                finishEditing(input, dayElement);
+            });
+            
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    finishEditing(input, dayElement);
+                }
+            });
+        });
+    }
+    
+    // פונקציה לחיבור אירוע מחיקה לאלמנט יום
+    function attachDeleteEvent(dayElement) {
+        const deleteBtn = dayElement.querySelector('.day-delete-btn');
+        if (!deleteBtn) return;
+        
+        // מסיר אירועים קודמים למניעת כפילות
+        const clone = deleteBtn.cloneNode(true);
+        deleteBtn.parentNode.replaceChild(clone, deleteBtn);
+        
+        // מוסיף אירוע לחיצה
+        clone.onclick = function(e) {
+            e.stopPropagation(); // מניעת בועה של אירועים
+            
+            const daysList = document.getElementById('days-list');
+            const isLastDay = daysList.querySelectorAll('.day-item:not(.removing):not(.deleted)').length <= 1;
+            
+            // שמירת המצב המקורי והוספת אפשרויות מחיקה
+            const dayName = dayElement.querySelector('.day-name').textContent;
+            const dayId = dayElement.dataset.day;
+            const dayNumber = dayElement.dataset.number;
+            const originalContent = dayElement.innerHTML;
+            dayElement.classList.add('deleting');
+            dayElement.setAttribute('draggable', 'false'); // ביטול גרירה בזמן מחיקה
+            
+            // הכנת הודעת אזהרה - אם זה היום האחרון, תן אזהרה חזקה יותר
+            let warningMessage = `האם למחוק את "${dayName}"?`;
+            let warningDescription = `כל פעילויות הלו"ז ביום זה ימחקו`;
+            
+            if (isLastDay) {
+                warningMessage = `זהירות! זהו היום האחרון`;
+                warningDescription = `מחיקת היום האחרון תגרום למחיקת כל פעילויות הלו"ז`;
+            }
+            
+            // שינוי תוכן האלמנט לאפשרויות מחיקה
+            dayElement.innerHTML = `
+                <div class="day-warning-text">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    ${warningMessage}
+                </div>
+                <div class="day-warning-description">
+                    ${warningDescription}
+                </div>
+                <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+                    <button class="btn primary-btn confirm-delete-day-btn">
+                        <i class="fas fa-trash-alt"></i> כן, למחוק
+                    </button>
+                    <button class="btn cancel-delete-day-btn">
+                        <i class="fas fa-times"></i> ביטול
+                    </button>
+                </div>
+            `;
+            
+            // חיבור מאזין אירועים לאישור מחיקה
+            const confirmBtn = dayElement.querySelector('.confirm-delete-day-btn');
+            if (confirmBtn) {
+                confirmBtn.onclick = function(e) {
+                    e.stopPropagation(); // מניעת בועה של אירועים
+                    
+                    // אם זה לא היום האחרון וזה היום הפעיל, עלינו לעדכן את פעילויות הלו"ז
+                    const isActiveDay = dayNumber === activeDay;
+                    
+                    if (!isLastDay && isActiveDay) {
+                        // במקום להעביר פעילויות ליום אחר, נמחק אותן
+                        const dayActivities = scheduleManager.getActivitiesForDay(dayNumber);
+                        // מחיקת כל הפעילויות של היום הנמחק
+                        dayActivities.forEach(activity => {
+                            scheduleManager.deleteItem(activity.id);
+                        });
+                    }
+                    
+                    // מחיקת היום ממנהל הימים
+                    daysManager.deleteDay(dayId);
+                    
+                    // אנימציית מחיקה והסרה לאחר האנימציה
+                    dayElement.classList.add('removing');
+                    setTimeout(() => {
+                        dayElement.remove();
+                        showToast('היום נמחק בהצלחה', 'success');
+                    }, 300);
+                };
+            }
+            
+            // חיבור מאזין אירועים לביטול מחיקה
+            const cancelBtn = dayElement.querySelector('.cancel-delete-day-btn');
+            if (cancelBtn) {
+                cancelBtn.onclick = function(e) {
+                    e.stopPropagation(); // מניעת בועה של אירועים
+                    
+                    // חזרה למצב המקורי
+                    dayElement.classList.remove('deleting');
+                    dayElement.innerHTML = originalContent;
+                    dayElement.setAttribute('draggable', 'true'); // החזרת אפשרות גרירה
+                    
+                    // חיבור מחדש של מאזיני האירועים
+                    attachEditEvent(dayElement);
+                    attachDeleteEvent(dayElement);
+                    setupDragAndDropEvents(dayElement);
+                };
+            }
+        };
+    }
+    
+    // פונקציה לסיום עריכת שם היום
+    function finishEditing(input, li) {
+        const newName = input.value.trim();
+        const dayId = li.dataset.day;
+        const originalName = input.dataset.originalName;
+        
+        if (newName && newName !== originalName) {
+            // עדכון שם היום במנהל הימים
+            const day = daysManager.getDayById(dayId);
+            if (day) {
+                daysManager.updateItem(dayId, { name: newName });
+            }
+        }
+        
+        // יצירת אלמנט טקסט חדש
+        const dayNameElement = document.createElement('div');
+        dayNameElement.className = 'day-name';
+        dayNameElement.textContent = newName || originalName;
+        input.replaceWith(dayNameElement);
+    }
+    
+    // הגדרת אירועי גרירה ושחרור
+    function setupDragAndDropEvents(item) {
+        item.addEventListener('dragstart', () => {
+            item.classList.add('dragging');
+        });
+        
+        item.addEventListener('dragend', () => {
+            item.classList.remove('dragging');
+        });
+    }
+    
+    // פונקציה לשמירת השינויים בימים
+    function saveDaysChanges() {
+        const daysList = document.getElementById('days-list');
+        const dayItems = daysList.querySelectorAll('.day-item:not(.removing):not(.deleted)');
+        
+        // מטפל במקרה שבו אין ימים ברשימה
+        if (dayItems.length === 0) {
+            // יצירת יום ברירת מחדל
+            const defaultDay = daysManager.addDay('יום 1');
+            
+            // עדכון הממשק
+            updateDayButtons();
+            
+            // עדכון יום פעיל
+            activeDay = defaultDay.number.toString();
+            localStorage.setItem('activeDay', activeDay);
+            
+            // מעבר כל פעילויות הלו"ז ליום החדש
+            const allScheduleItems = scheduleManager.getAllItems();
+            allScheduleItems.forEach(item => {
+                scheduleManager.updateItem(item.id, { day: activeDay });
+            });
+            
+            closeAllModals();
+            showToast('נוצר יום ברירת מחדל חדש', 'success');
+            return;
+        }
+        
+        // יצירת מערך של ימים מעודכנים
+        const updatedDays = Array.from(dayItems).map((item, index) => {
+            const dayId = item.dataset.day;
+            const dayNumber = item.dataset.number;
+            const dayName = item.querySelector('.day-name').textContent;
+            
+            return {
+                id: dayId,
+                number: parseInt(dayNumber),
+                name: dayName,
+                order: index + 1
+            };
+        });
+        
+        // בדיקה אם היום הפעיל עדיין קיים
+        const activeNumberExists = updatedDays.some(day => day.number.toString() === activeDay);
+        
+        // עדכון של כל הימים
+        daysManager.updateDayOrder(updatedDays);
+        
+        // אם היום הפעיל לא קיים יותר, נעבור ליום הראשון
+        if (!activeNumberExists && updatedDays.length > 0) {
+            activeDay = updatedDays[0].number.toString();
+            localStorage.setItem('activeDay', activeDay);
+        }
+        
+        // עדכון ממשק המשתמש
+        updateDayButtons();
+        
+        closeAllModals();
+        showToast('הימים עודכנו בהצלחה', 'success');
+        
+        // רענון הלו"ז
+        renderSchedule();
+    }
+
+    // פונקציה חדשה לעדכון כפתורי הימים בממשק
+    function updateDayButtons() {
+        const daySelector = document.querySelector('.day-selector');
+        const days = daysManager.getDays();
+        
+        // שמירת כפתורי ההוספה והעריכה
+        const addDayBtn = daySelector.querySelector('.add-day-btn');
+        const editDaysBtn = daySelector.querySelector('.edit-days-btn');
+        
+        // ניקוי כל כפתורי היום הקיימים
+        document.querySelectorAll('.day-btn:not(.add-day-btn):not(.edit-days-btn)').forEach(btn => {
+            btn.remove();
+        });
+        
+        // יצירת כפתורים מעודכנים
+        days.forEach(day => {
+            const dayBtn = document.createElement('button');
+            dayBtn.className = 'day-btn';
+            dayBtn.dataset.day = day.number.toString();
+            dayBtn.textContent = day.name;
+            dayBtn.title = `הצג לו"ז ליום ${day.number}`;
+            
+            // אם זה היום הפעיל, הוספת קלאס active
+            if (day.number.toString() === activeDay) {
+                dayBtn.classList.add('active');
+            }
+            
+            // הוספה לפני כפתור ההוספה
+            daySelector.insertBefore(dayBtn, addDayBtn);
+        });
+        
+        // הגדרת אירועי לחיצה לכפתורי היום
+        setupDayButtonEvents();
+    }
+
+    // הגדרת אירועים לרשימת הימים במודל
+    function setupDaysListEvents() {
+        const daysList = document.getElementById('days-list');
+        
+        // מאזיני אירועים לסגירת מודל
+        const modal = document.getElementById('edit-days-modal');
+        const closeBtn = modal.querySelector('.close-btn');
+        closeBtn.addEventListener('click', closeAllModals);
+        
+        // מוודא שלחיצה מחוץ למודל תסגור אותו
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeAllModals();
+            }
+        });
+        
+        daysList.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const draggingItem = document.querySelector('.dragging');
+            if (!draggingItem) return;
+            
+            const siblings = [...daysList.querySelectorAll('.day-item:not(.dragging)')];
+            const nextSibling = siblings.find(sibling => {
+                const box = sibling.getBoundingClientRect();
+                const offset = e.clientY - box.top - box.height / 2;
+                return offset < 0;
+            });
+            
+            if (nextSibling) {
+                daysList.insertBefore(draggingItem, nextSibling);
+            } else {
+                daysList.appendChild(draggingItem);
+            }
+        });
+        
+        // הוספת כפתור הוספת יום חדש במודל
+        const addDayItemBtn = document.getElementById('add-day-item-btn');
+        addDayItemBtn.addEventListener('click', () => {
+            // יצירת יום חדש עם המנהל
+            const newDay = daysManager.addDay('יום חדש');
+            
+            // יצירת אלמנט ליום החדש
+            const li = document.createElement('li');
+            li.className = 'day-item';
+            li.dataset.day = newDay.id;
+            li.dataset.number = newDay.number;
+            li.setAttribute('draggable', 'true');
+            li.innerHTML = `
+                <div class="day-handle">
+                    <i class="fas fa-grip-lines"></i>
+                </div>
+                <div class="day-name">יום חדש</div>
+                <div class="day-actions">
+                    <button class="day-btn day-edit-btn" title="ערוך יום">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="day-btn day-delete-btn" title="מחק יום">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            `;
+            
+            setupDragAndDropEvents(li);
+            attachEditEvent(li);
+            attachDeleteEvent(li);
+            
+            daysList.appendChild(li);
+            
+            // הפעל את פעולת העריכה באופן אוטומטי ליום החדש
+            setTimeout(() => {
+                const editBtn = li.querySelector('.day-edit-btn');
+                if (editBtn) editBtn.click();
+            }, 10);
+        });
+        
+        // שמירת שינויים
+        const saveDaysBtn = document.getElementById('save-days-btn');
+        saveDaysBtn.addEventListener('click', saveDaysChanges);
+        
+        // ביטול שינויים
+        const cancelDaysBtn = document.getElementById('cancel-days-btn');
+        cancelDaysBtn.addEventListener('click', closeAllModals);
+    }
+    
+    // מאזיני אירועים
+    setupDayButtonEvents();
+    setupDaysListEvents();
+    
+    editDaysBtn.addEventListener('click', openEditDaysModal);
 });
 
 // פונקציה לאתחול הפלאגינים והתאמות למכשירים מודרניים
