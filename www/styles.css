@@ -433,18 +433,59 @@ header p {
 
 .empty-state {
     text-align: center;
-    padding: 2rem;
+    padding: 3rem 1.5rem;
     color: #6c757d;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    background-color: rgba(248, 249, 250, 0.5);
+    border-radius: 12px;
+    width: 100%;
 }
 
 .empty-state i {
-    font-size: 3rem;
-    margin-bottom: 1rem;
+    font-size: 3.5rem;
+    margin-bottom: 1.2rem;
     opacity: 0.3;
+    color: var(--primary-color);
+}
+
+.empty-state h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #495057;
 }
 
 .empty-state p {
-    font-size: 0.9rem;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    max-width: 70%;
+    line-height: 1.5;
+}
+
+@media (max-width: 480px) {
+    .empty-state {
+        padding: 2rem 1rem;
+        min-height: 180px;
+    }
+    
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .empty-state h3 {
+        font-size: 1.1rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .empty-state p {
+        font-size: 0.9rem;
+        max-width: 90%;
+    }
 }
 
 .category-select {
@@ -1005,7 +1046,8 @@ header p {
     display: flex;
     gap: 0.3rem;
     overflow-x: auto;
-    padding: 0.8rem 1rem;
+    padding: 0.8rem 1rem 0.8rem 1rem;
+    padding-right: 58px; /* רווח בצד ימין (שמאל ויזואלי) עבור כפתור העריכה */
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     border-radius: 16px;
@@ -1020,9 +1062,81 @@ header p {
     order: 1;
     max-width: 100%;
     scroll-behavior: smooth;
+    position: relative;
 }
 
-/* סגנון גלילה מותאם */
+.edit-days-btn-container {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 25;
+    background: linear-gradient(to left, rgba(255,255,255,0.95), rgba(255,255,255,0.7), rgba(255,255,255,0));
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+    pointer-events: none;
+}
+
+.edit-days-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(to bottom, rgba(255,255,255,0.99), rgba(245,245,245,0.95));
+    color: var(--primary-color);
+    border: 1px solid rgba(74, 109, 167, 0.25);
+    border-radius: 12px;
+    min-width: 42px;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 30;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 1.1rem;
+    pointer-events: auto;
+}
+
+.edit-days-btn:hover {
+    background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(245,245,245,1));
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 4px 12px rgba(74, 109, 167, 0.25);
+}
+
+@media (max-width: 480px) {
+    .day-selector {
+        gap: 0.2rem;
+        padding: 0.6rem 0.8rem 0.4rem 0.8rem;
+        padding-right: 48px; /* רווח בצד ימין (שמאל ויזואלי) במובייל */
+        margin: 0.5rem 0.5rem 1rem;
+        border-radius: 12px;
+    }
+    
+    .edit-days-btn-container {
+        width: 48px;
+    }
+    
+    .edit-days-btn {
+        right: 5px;
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        font-size: 0.95rem;
+        border-radius: 10px;
+    }
+}
+
 .day-selector::-webkit-scrollbar {
     height: 6px;
     background-color: rgba(240, 240, 240, 0.5);
@@ -1085,7 +1199,7 @@ header p {
     border-radius: 3px;
 }
 
-.add-day-btn, .edit-days-btn {
+.add-day-btn {
     min-width: 45px;
     width: 45px;
     height: 42px;
@@ -1099,18 +1213,65 @@ header p {
     margin-left: 0.5rem;
     z-index: 1;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-}
-
-.add-day-btn {
     background: rgba(255, 255, 255, 0.8);
     color: var(--primary-color);
     border: 2px dashed rgba(74, 109, 167, 0.3);
 }
 
+.add-day-btn:hover {
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--primary-color);
+    border-color: rgba(74, 109, 167, 0.5);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(74, 109, 167, 0.1);
+}
+
 .edit-days-btn {
-    background: rgba(255, 255, 255, 0.8);
-    color: #666;
-    border: 1px solid rgba(220, 220, 220, 0.5);
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(to bottom, rgba(255,255,255,0.99), rgba(245,245,245,0.95));
+    color: var(--primary-color);
+    border: 1px solid rgba(74, 109, 167, 0.25);
+    border-radius: 12px;
+    min-width: 42px;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 30;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 1.1rem;
+}
+
+.edit-days-btn:hover {
+    background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(245,245,245,1));
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 4px 12px rgba(74, 109, 167, 0.25);
+}
+
+@media (max-width: 480px) {
+    .edit-days-btn {
+        position: absolute;
+        left: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        font-size: 0.95rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+        z-index: 30;
+        background: linear-gradient(to bottom, rgba(255,255,255,0.99), rgba(245,245,245,0.95));
+        border: 1.5px solid rgba(74, 109, 167, 0.25);
+    }
 }
 
 .add-day-btn:hover, .edit-days-btn:hover {
@@ -1124,32 +1285,32 @@ header p {
 }
 
 .edit-days-btn:hover {
-    background: rgba(255, 255, 255, 0.95);
-    border-color: #666;
+    background: rgba(255, 255, 255, 0.98);
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 4px 12px rgba(74, 109, 167, 0.2);
 }
 
 @media (max-width: 480px) {
     .day-selector {
         gap: 0.2rem;
-        padding: 0.6rem 0.8rem 0.4rem;
+        padding: 0.6rem 0.8rem 0.4rem 48px; /* הרווח משמאל מותאם למסך מובייל */
         margin: 0.5rem 0.5rem 1rem;
         border-radius: 12px;
     }
     
-    .day-btn {
-        padding: 0.6rem 1.2rem;
-        min-width: 80px;
-        font-size: 0.9rem;
-        border-radius: 10px 10px 0 0;
+    .edit-days-btn-container {
+        width: 48px;
     }
     
-    .add-day-btn, .edit-days-btn {
-        width: 38px;
-        height: 38px;
-        min-width: 38px;
-        font-size: 0.9rem;
+    .edit-days-btn {
+        left: 6px;
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        font-size: 0.95rem;
         border-radius: 10px;
-        margin-left: 0.3rem;
     }
 }
 
@@ -1242,6 +1403,50 @@ header p {
     box-shadow: 0 2px 8px rgba(74, 109, 167, 0.15);
 }
 
+.time-block-category-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 0.5rem;
+}
+
+.time-block-location {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: rgba(25, 118, 210, 0.1);
+    padding: 4px 10px 4px 4px;
+    border-radius: 20px;
+    color: #1976d2;
+    font-size: 0.85rem;
+}
+
+.time-block-location .location-text {
+    font-weight: 500;
+}
+
+.time-block-location .map-action {
+    color: #1976d2;
+    background: rgba(25, 118, 210, 0.15);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    padding: 0;
+    margin-right: 5px;
+}
+
+.time-block-location .map-action:hover {
+    background: rgba(25, 118, 210, 0.25);
+    color: #1565c0;
+    transform: scale(1.1);
+}
+
 .time-block-actions {
     display: flex;
     gap: 0.8rem;
@@ -1289,9 +1494,19 @@ header p {
     background: rgba(74, 109, 167, 0.1);
 }
 
-.time-block-btn.complete:hover {
+.time-block-btn.complete {
     color: var(--success-color);
     background: rgba(40, 167, 69, 0.1);
+}
+
+.time-block-btn.map-action {
+    color: #1976d2;
+    text-decoration: none;
+}
+
+.time-block-btn.map-action:hover {
+    color: #1565c0;
+    background: rgba(25, 118, 210, 0.1);
 }
 
 .time-block.completed {
@@ -1347,6 +1562,28 @@ header p {
         font-weight: 500;
     }
     
+    .time-block-category-container {
+        margin-top: 6px;
+        gap: 6px;
+    }
+    
+    .time-block-category {
+        padding: 3px 6px;
+        font-size: 0.8rem;
+        margin-bottom: 0;
+    }
+    
+    .time-block-location {
+        font-size: 0.8rem;
+        padding: 3px 8px 3px 3px;
+    }
+    
+    .time-block-location .map-action {
+        width: 24px;
+        height: 24px;
+        margin-right: 3px;
+    }
+    
     .time-block-actions {
         display: flex;
         gap: 15px;
@@ -1366,6 +1603,7 @@ header p {
 
     .time-block-btn.complete {
         color: var(--success-color);
+    }
     }
 
     .time-block-btn.edit {
@@ -1416,8 +1654,6 @@ header p {
         margin: 0.3rem 0;
         padding: 0 0.3rem;
     }
-}
-
 /* סגנונות למסעדות */
 .food-card {
     background: #fff;
@@ -2646,10 +2882,60 @@ header p {
 }
 
 .day-item.deleting {
-    cursor: default;
-    background-color: #fff8f8;
-    border-color: #ffcccc;
-    padding: 15px 10px;
+    background-color: rgba(220, 53, 69, 0.05);
+    border-color: rgba(220, 53, 69, 0.2);
+    border-left: 3px solid #dc3545;
+    padding-left: 15px;
+    transition: all 0.3s ease;
+}
+
+.day-item.deleting .day-name {
+    color: #6c757d;
+    text-decoration: line-through;
+}
+
+.day-warning-text {
+    color: #dc3545;
+    font-size: 0.8rem;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 500;
+}
+
+.day-warning-text i {
+    animation: pulsate 1.5s infinite;
+}
+
+.cancel-delete-day-btn {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.cancel-delete-day-btn:hover {
+    background: rgba(0, 123, 255, 0.1);
+    color: #0d6efd;
+}
+
+.delete-confirmation-actions {
+    display: flex;
+    gap: 8px;
+}
+
+@keyframes pulsate {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
 }
 
 .day-item:hover {
@@ -2829,34 +3115,50 @@ header p {
 
 /* כפתור עריכת ימים */
 .edit-days-btn {
-    background: none;
-    border: none;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #6c757d;
-    cursor: pointer;
     position: absolute;
     left: 10px;
     top: 50%;
     transform: translateY(-50%);
-    transition: all 0.2s ease;
-    z-index: 10;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.99), rgba(245,245,245,0.95));
+    color: var(--primary-color);
+    border: 1px solid rgba(74, 109, 167, 0.25);
+    border-radius: 12px;
+    min-width: 42px;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 30;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 1.1rem;
 }
 
 .edit-days-btn:hover {
-    background-color: rgba(0, 123, 255, 0.1);
-    color: #0d6efd;
+    background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(245,245,245,1));
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 4px 12px rgba(74, 109, 167, 0.25);
 }
 
 @media (max-width: 480px) {
     .edit-days-btn {
-        width: 24px;
-        height: 24px;
+        position: absolute;
         left: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        font-size: 0.95rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+        z-index: 30;
+        background: linear-gradient(to bottom, rgba(255,255,255,0.99), rgba(245,245,245,0.95));
+        border: 1.5px solid rgba(74, 109, 167, 0.25);
     }
 }
 

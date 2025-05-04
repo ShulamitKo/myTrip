@@ -10,12 +10,14 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="stylesheet" href="styles.css">
+    <!-- טעינת קובץ ה-JavaScript הראשי כמודול -->
+    <script type="module" src="js/app.js"></script>
 </head>
 <body>
     <header>
         <div class="header-content">
             <div class="title-container">
-                <button class="edit-title-btn" onclick="editTitle()" title="ערוך את כותרת הטיול">
+                <button class="edit-title-btn" title="ערוך את כותרת הטיול">
                     <i class="fas fa-edit"></i>
                 </button>
                 <h1 id="appTitle">הטיול שלי</h1>
@@ -413,13 +415,15 @@
     <div class="tab-content" id="schedule">
         <div class="schedule-container">
             <div class="day-selector">
+                <div class="edit-days-btn-container">
+                    <button class="edit-days-btn" title="ערוך ימים"><i class="fas fa-pencil-alt"></i></button>
+                </div>
                 <button class="day-btn" data-day="1">יום 1</button>
                 <button class="day-btn" data-day="2">יום 2</button>
                 <button class="day-btn" data-day="3">יום 3</button>
                 <button class="day-btn active" data-day="4">יום 4</button>
                 <button class="day-btn" data-day="5">יום 5</button>
                 <button class="add-day-btn" title="הוסף יום חדש"><i class="fas fa-plus"></i></button>
-                <button class="edit-days-btn" title="ערוך ימים"><i class="fas fa-cog"></i></button>
             </div>
             
             <div class="schedule-day-title">
@@ -462,15 +466,15 @@
                         <input type="time" id="edit-schedule-time" required>
                     </div>
                     <div class="form-group">
-                        <label for="edit-schedule-duration">משך זמן (בדקות)</label>
-                        <input type="number" id="edit-schedule-duration" min="15" step="15" value="60">
-                    </div>
-                    <div class="form-group">
                         <label for="edit-schedule-category">קטגוריה</label>
                         <select id="edit-schedule-category">
                             <option value="attraction">אטרקציה</option>
                             <option value="food">אוכל</option>
                             <option value="transport">תחבורה</option>
+                            <option value="hotel">מלון/לינה</option>
+                            <option value="shopping">קניות</option>
+                            <option value="meeting">פגישה</option>
+                            <option value="relax">מנוחה ופנאי</option>
                             <option value="other">אחר</option>
                         </select>
                     </div>
@@ -687,7 +691,5 @@
             </a>
         </div>
     </footer>
-
-    <script src="./script.js"></script>
 </body>
 </html>
