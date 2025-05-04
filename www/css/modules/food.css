@@ -1,0 +1,285 @@
+/* סגנונות למסעדות - לשונית אוכל */
+
+.food-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    margin-bottom: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #f0f0f0;
+}
+
+.food-card:not(:last-child) {
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 2px;
+}
+
+#foodList {
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 16px;
+}
+
+.food-header {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 16px;
+    gap: 12px;
+}
+
+.food-main-info {
+    flex-grow: 1;
+}
+
+.category-tag {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    color: white;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.food-meta {
+    margin-top: 8px;
+}
+
+.food-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* עיצוב תגיות קטגוריה */
+.category-tag.restaurant { background: linear-gradient(135deg, #FF6B6B, #FF8787); }
+.category-tag.cafe { background: linear-gradient(135deg, #4ECDC4, #45B7AF); }
+.category-tag.fastfood { background: linear-gradient(135deg, #FFD93D, #FFB302); }
+.category-tag.dessert { background: linear-gradient(135deg, #FF8ED4, #FF70C6); }
+.category-tag.local { background: linear-gradient(135deg, #6C5CE7, #5D4ED6); }
+
+.category-tag i {
+    font-size: 1rem;
+}
+
+.category-tag .tag-text {
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.food-name {
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.food-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.food-tags {
+    display: flex;
+    gap: 8px;
+}
+
+.price-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    color: #fff;
+    border: none;
+    font-weight: 500;
+}
+
+.price-tag.cheap {
+    background: linear-gradient(45deg, #A8E6CF, #88D7B5);
+}
+
+.price-tag.medium {
+    background: linear-gradient(45deg, #FFD93D, #FFB302);
+}
+
+.price-tag.expensive {
+    background: linear-gradient(45deg, #FF6B6B, #FF8787);
+}
+
+.price-tag i {
+    margin-left: 6px;
+    font-size: 1.1em;
+    opacity: 0.9;
+}
+
+.price-tag .tag-text {
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.food-body {
+    padding: 12px 16px;
+    color: #666;
+    font-size: 0.9em;
+    flex: 1;
+}
+
+.food-address {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.food-notes {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.food-rating {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    color: #FFD93D; /* צהוב */
+    font-size: 1.1em;
+}
+
+.food-rating .fas.fa-star {
+    color: #FFD93D; /* כוכב מלא - צהוב */
+}
+
+.food-rating .far.fa-star {
+    color: #ccc; /* כוכב ריק - אפור בהיר */
+}
+
+.food-footer {
+    display: flex;
+    justify-content: space-around;
+    padding: 8px;
+    border-top: 1px solid #f0f0f0;
+    background: #fafafa;
+}
+
+.food-action {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: none;
+    background: none;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+.food-action:hover {
+    color: var(--primary-color);
+    background: #f0f0f0;
+    border-radius: 4px;
+}
+
+.food-action i {
+    font-size: 1.1em;
+}
+
+.food-action.visited {
+    color: #4caf50;
+}
+
+.food-action.visited:hover {
+    color: #388e3c;
+    background: #e8f5e9;
+}
+
+.food-action.map-action {
+    color: #1976d2;
+}
+
+.food-action.map-action:hover {
+    color: #1565c0;
+    background: #e3f2fd;
+}
+
+.food-action.delete-action {
+    color: #dc3545;
+}
+
+.food-action.delete-action:hover {
+    color: #c82333;
+    background: #fff3f5;
+}
+
+.food-card.visited {
+    border-right: 3px solid #4caf50;
+}
+
+/* סינון מחירים */
+.price-filter-options, .rating-filter-options {
+    background-color: white;
+    border-radius: 8px;
+    padding: 0.5rem 0.8rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    flex: 1;
+    min-width: 200px;
+}
+
+.filters-row {
+    margin-bottom: 1rem;
+}
+
+.price-filter-btn, .rating-filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    background-color: #f0f2f5;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid transparent;
+}
+
+.price-filter-btn.active, .rating-filter-btn.active {
+    background-color: white;
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.price-filter-btn:not(.active), .rating-filter-btn:not(.active) {
+    opacity: 0.6;
+}
+
+.price-filter-btn[data-price="cheap"] i {
+    color: var(--success-color);
+}
+
+.price-filter-btn[data-price="medium"] i {
+    color: #FFD93D; /* צהוב */
+}
+
+.price-filter-btn[data-price="expensive"] i {
+    color: var(--danger-color);
+}
+
+.rating-filter-btn i {
+    color: #FFD93D; /* צהוב */
+}
+
+.price-filter-btn:hover, .rating-filter-btn:hover {
+    background-color: #e0e3e8;
+} 

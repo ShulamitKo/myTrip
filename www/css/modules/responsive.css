@@ -1,0 +1,306 @@
+/* סגנונות רספונסיביים */
+
+/* מסכים קטנים עד 480px */
+@media (max-width: 480px) {
+    .empty-state {
+        padding: 2rem 1rem;
+        min-height: 180px;
+    }
+    
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .empty-state h3 {
+        font-size: 1.1rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .empty-state p {
+        font-size: 0.9rem;
+        max-width: 90%;
+    }
+    
+    .title-container {
+        gap: 8px;
+    }
+    
+    .edit-title-btn {
+        padding: 6px;
+        font-size: 1rem;
+        width: 30px;
+        height: 30px;
+    }
+    
+    #appTitle {
+        font-size: 1.5rem;
+    }
+    
+    .app-footer {
+        padding: 0.2rem 0 calc(0.2rem + var(--safe-area-bottom)) 0;
+        font-size: 0.7rem;
+        height: 25px;
+    }
+
+    .whatsapp-link {
+        font-size: 1rem;
+        margin-bottom: var(--safe-area-bottom);
+    }
+
+    body {
+        padding-bottom: 100px;
+    }
+
+    .nav-bar {
+        bottom: 25px;
+        padding: 0.6rem 0 calc(0.8rem + var(--safe-area-bottom)) 0;
+    }
+    
+    .time-block {
+        padding: 10px 12px;
+        gap: 10px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0.95), rgba(248, 249, 250, 0.95));
+        border: 1px solid rgba(74, 109, 167, 0.12);
+        flex-direction: row;
+        align-items: center;
+        box-shadow: 0 2px 6px rgba(74, 109, 167, 0.08);
+    }
+    
+    .time-block-time {
+        font-size: 15px;
+        padding: 5px 10px;
+        background: rgba(74, 109, 167, 0.06);
+        border-radius: 6px;
+        color: var(--primary-color);
+        font-weight: 500;
+        min-width: 70px;
+        border-left: none;
+        text-align: center;
+    }
+    
+    .time-block-content {
+        flex: 1;
+        padding: 0 4px;
+    }
+    
+    .time-block-text {
+        font-size: 15px;
+        line-height: 1.4;
+        margin-bottom: 0;
+        color: #333;
+        font-weight: 500;
+    }
+    
+    .time-block-category-container {
+        margin-top: 6px;
+        gap: 6px;
+    }
+    
+    .time-block-category {
+        padding: 3px 6px;
+        font-size: 0.8rem;
+        margin-bottom: 0;
+    }
+    
+    .time-block-location {
+        font-size: 0.8rem;
+        padding: 3px 8px 3px 3px;
+    }
+    
+    .time-block-location .map-action {
+        width: 24px;
+        height: 24px;
+        margin-right: 3px;
+    }
+    
+    .time-block-actions {
+        display: flex;
+        gap: 15px;
+        margin: 0;
+        padding: 0;
+        border-top: none;
+        opacity: 0.85;
+        background: transparent;
+    }
+    
+    .time-block-btn {
+        padding: 6px;
+        font-size: 17px;
+        width: 32px;
+        height: 32px;
+    }
+
+    .time-block-btn.complete {
+        color: var(--success-color);
+    }
+
+    .time-block-btn.edit {
+        color: var(--primary-color);
+    }
+
+    .time-block-btn.delete {
+        color: var(--danger-color);
+    }
+    
+    .day-selector {
+        gap: 0.2rem;
+        padding: 0.6rem 0.8rem 0.4rem 0.8rem;
+        padding-right: 48px; /* רווח בצד ימין (שמאל ויזואלי) במובייל */
+        margin: 0.5rem 0.5rem 1rem;
+        border-radius: 12px;
+    }
+    
+    .edit-days-btn-container {
+        width: 48px;
+    }
+    
+    .edit-days-btn {
+        right: 5px;
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        font-size: 0.95rem;
+        border-radius: 10px;
+    }
+    
+    .add-item {
+        margin: 10px 0;
+        padding: 8px;
+        gap: 8px;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0.95), rgba(248, 249, 250, 0.95));
+    }
+
+    .add-item input[type="time"],
+    .add-item input[type="text"] {
+        padding: 8px;
+        font-size: 15px;
+    }
+
+    .add-item button {
+        padding: 8px;
+        min-width: 40px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    }
+
+    .schedule-day-title {
+        font-size: 1rem;
+        margin: 0.3rem 0;
+        padding: 0 0.3rem;
+    }
+    
+    .info-row {
+        padding: 6px 4px;
+    }
+    
+    .edit-row-btn, .delete-row-btn, .edit-title-inline {
+        width: 24px;
+        height: 24px;
+        font-size: 0.8rem;
+    }
+    
+    .info-title {
+        padding-left: 24px;
+    }
+    
+    .tabs {
+        margin: 0.4rem;
+        padding: 8px 10px;
+        border-radius: 10px;
+    }
+    
+    .tab {
+        padding: 8px 10px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin: 0 2px;
+        min-width: unset;
+    }
+    
+    .tab.active::after {
+        height: 2px;
+        width: 40%;
+    }
+}
+
+/* מסכים בינוניים עד 600px */
+@media (max-width: 600px) {
+    .place-card, .food-card {
+        margin-bottom: 12px;
+    }
+
+    #placeList, #foodList {
+        padding: 8px;
+        border-radius: 12px;
+    }
+
+    .place-header, .food-header {
+        padding: 10px 12px;
+    }
+
+    .place-body, .food-body {
+        padding: 10px 12px;
+    }
+
+    .place-footer, .food-footer {
+        padding: 8px;
+    }
+
+    .place-action, .food-action {
+        font-size: 0.85em;
+        padding: 6px 8px;
+    }
+
+    .place-tags, .food-tags {
+        gap: 6px;
+    }
+
+    .category-tag, .priority-tag, .price-tag {
+        padding: 3px 6px;
+        font-size: 0.8em;
+    }
+    
+    .category-tag {
+        font-size: 0.85rem;
+        padding: 4px 10px;
+    }
+    
+    .category-tag i {
+        font-size: 0.9rem;
+    }
+    
+    .schedule-container {
+        padding: 4px;
+        border-radius: 12px;
+        margin: 0;
+    }
+
+    .schedule-day {
+        padding: 4px;
+        border-radius: 12px;
+        margin: 4px 0;
+    }
+    
+    .filters-row {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .price-filter-options, .rating-filter-options {
+        width: 100%;
+    }
+}
+
+/* מסכים גדולים מעל 768px */
+@media (min-width: 768px) {
+    .schedule-container {
+        padding: 16px;
+        max-width: 100%;
+    }
+
+    .schedule-day {
+        padding: 16px;
+    }
+} 

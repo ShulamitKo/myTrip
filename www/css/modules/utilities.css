@@ -1,0 +1,156 @@
+/* סגנונות כלים שימושיים */
+
+/* הגדרות */
+.settings-container {
+    padding: 1rem;
+}
+
+.settings-item {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.settings-item h3 {
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.settings-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 1rem;
+}
+
+/* חלונות התראה (Toast) */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background-color: #333;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1100;
+    opacity: 0;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    max-width: 80%;
+    text-align: center;
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.toast.success {
+    background-color: #28a745;
+}
+
+.toast.error {
+    background-color: #dc3545;
+}
+
+.toast.warning {
+    background-color: #ffc107;
+    color: #333;
+}
+
+/* עיצוב מיוחד לחלון אישור מחיקת נתוני האפליקציה */
+#confirm-delete-modal.settings-delete-modal .modal-content {
+    max-width: 400px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border-top: 5px solid var(--danger-color);
+}
+
+#confirm-delete-modal.settings-delete-modal .modal-header h2 {
+    font-size: 1.5em;
+    font-weight: 600;
+    color: var(--danger-color);
+}
+
+#confirm-delete-modal.settings-delete-modal .modal-body {
+    padding: 16px 20px 10px;
+}
+
+#confirm-delete-modal.settings-delete-modal .modal-footer {
+    padding: 12px 20px 20px;
+    gap: 16px;
+}
+
+#confirm-delete-modal.settings-delete-modal #confirm-delete-message {
+    font-size: 1.1em;
+    line-height: 1.5;
+    margin: 10px 0;
+}
+
+#confirm-delete-modal.settings-delete-modal .delete-icon-container {
+    margin: 15px 0 20px;
+}
+
+#confirm-delete-modal.settings-delete-modal .delete-icon-large {
+    font-size: 4rem;
+}
+
+#confirm-delete-modal.settings-delete-modal .btn {
+    padding: 12px 20px;
+    font-size: 1rem;
+    min-width: 120px;
+    border-radius: 6px;
+}
+
+/* כפתורים לאישור מחיקה */
+.delete-confirm-btn {
+    background: linear-gradient(135deg, #dc3545, #c82333) !important;
+    color: white !important;
+    border: none !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 5px rgba(220, 53, 69, 0.3) !important;
+}
+
+.delete-confirm-btn:hover {
+    background: linear-gradient(135deg, #c82333, #bd2130) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.4) !important;
+}
+
+.delete-cancel-btn {
+    background: linear-gradient(135deg, #f8f9fa, #e2e6ea) !important;
+    color: #343a40 !important;
+    border: 1px solid #ced4da !important;
+    transition: all 0.3s ease !important;
+}
+
+.delete-cancel-btn:hover {
+    background: linear-gradient(135deg, #e2e6ea, #dae0e5) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* קישור מדיניות פרטיות */
+#privacy-policy-link {
+    color: #4a6da7;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    margin-top: 5px;
+}
+
+#privacy-policy-link:hover {
+    text-decoration: underline;
+}
+
+#privacy-policy-link:before {
+    content: "\f05a";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-left: 6px;
+    font-size: 0.9em;
+} 

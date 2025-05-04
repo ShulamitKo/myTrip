@@ -1,0 +1,30 @@
+/* MyTrip App - CSS מודולרי */
+
+/* משתנים וערכים גלובליים */
+@import url('./modules/variables.css');
+
+/* סגנונות בסיסיים */
+@import url('./modules/base.css');
+
+/* עיצוב כללי (header, footer, layout) */
+@import url('./modules/layout.css');
+
+/* רכיבים שימושיים (כפתורים, קלטים, תפריטים) */
+@import url('./modules/components.css');
+
+/* עיצוב מודאלים וחלונות קופצים */
+@import url('./modules/modals.css');
+
+/* עיצוב לשוניות ספציפיות */
+@import url('./modules/tasks.css');
+@import url('./modules/shopping.css');
+@import url('./modules/places.css');
+@import url('./modules/food.css');
+@import url('./modules/schedule.css');
+@import url('./modules/info.css');
+
+/* כלים שימושיים */
+@import url('./modules/utilities.css');
+
+/* סגנונות רספונסיביים */
+@import url('./modules/responsive.css'); 

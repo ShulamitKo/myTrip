@@ -1,0 +1,384 @@
+/* סגנונות רכיבים שימושיים */
+
+/* כפתורים ואינטראקציות */
+.btn, .btn-primary, .btn-secondary {
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-primary, .primary-btn {
+    background: linear-gradient(135deg, var(--primary-color), #3c5a8a);
+    color: white;
+}
+
+.btn-primary:hover, .primary-btn:hover {
+    background: linear-gradient(135deg, #3c5a8a, var(--primary-color));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.btn-secondary, .btn {
+    background: linear-gradient(135deg, #6c757d, #5a6268);
+    color: white;
+}
+
+.btn-secondary:hover, .btn:hover {
+    background: linear-gradient(135deg, #5a6268, #6c757d);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--success-color), #218838);
+    color: white;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #218838, var(--success-color));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--danger-color), #c82333);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #c82333, var(--danger-color));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* כפתורים נוספים */
+.btn-info {
+    background: linear-gradient(135deg, #17a2b8, #138496);
+    color: white;
+}
+
+.btn-info:hover {
+    background: linear-gradient(135deg, #138496, #17a2b8);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #ffc107, #e0a800);
+    color: #212529;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #e0a800, #ffc107);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.btn-light {
+    background: linear-gradient(135deg, #f8f9fa, #e2e6ea);
+    color: #212529;
+    border: 1px solid #dae0e5;
+}
+
+.btn-light:hover {
+    background: linear-gradient(135deg, #e2e6ea, #f8f9fa);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.btn-dark {
+    background: linear-gradient(135deg, #343a40, #23272b);
+    color: white;
+}
+
+.btn-dark:hover {
+    background: linear-gradient(135deg, #23272b, #343a40);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* טפסים וקלטים */
+.add-item {
+    display: flex;
+    margin-bottom: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    gap: 8px;
+    padding: 8px;
+}
+
+.add-item input[type="time"] {
+    width: 100px;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+    font-size: 1rem;
+}
+
+.add-item input[type="text"] {
+    flex: 1;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+    font-size: 1rem;
+    min-width: 0;
+}
+
+.add-item button {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    padding: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 6px;
+    min-width: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.add-item button:hover {
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* כפתור סימון (צ'קבוקס) */
+.checkbox {
+    margin-left: 0.8rem;
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.checkbox.checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.checkbox.checked:after {
+    content: '✓';
+    color: white;
+    font-size: 14px;
+}
+
+/* כפתורי עריכה ומחיקה */
+.edit-btn, .delete-btn {
+    background: none;
+    border: none;
+    color: #555;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.edit-btn:hover {
+    color: #007bff;
+    background-color: rgba(0, 123, 255, 0.1);
+    transform: scale(1.1);
+}
+
+.delete-btn:hover {
+    color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+    transform: scale(1.1);
+}
+
+/* תגיות ופילטרים */
+.filter-options {
+    display: flex;
+    margin-bottom: 1rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+}
+
+.filter-btn {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 0.4rem 0.8rem;
+    margin-left: 0.5rem;
+    white-space: nowrap;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-btn.active {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.filter-btn:hover:not(.active) {
+    background-color: #f0f2f5;
+    border-color: #c0c8d0;
+    transform: translateY(-1px);
+}
+
+/* מצב ריק */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    color: #6c757d;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    background-color: rgba(248, 249, 250, 0.5);
+    border-radius: 12px;
+    width: 100%;
+}
+
+.empty-state i {
+    font-size: 3.5rem;
+    margin-bottom: 1.2rem;
+    opacity: 0.3;
+    color: var(--primary-color);
+}
+
+.empty-state h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #495057;
+}
+
+.empty-state p {
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    max-width: 70%;
+    line-height: 1.5;
+}
+
+/* כותרות קטעים */
+.section-title {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--dark-color);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.section-title i {
+    margin-left: 0.5rem;
+    color: var(--primary-color);
+}
+
+/* כפתורי הגדרות */
+.primary-btn {
+    background: linear-gradient(135deg, var(--primary-color), #3a5d97);
+    color: white;
+    border-color: var(--primary-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.primary-btn:hover {
+    background: linear-gradient(135deg, #3a5d97, var(--primary-color));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.secondary-btn {
+    background: linear-gradient(135deg, var(--secondary-color), #7d3c98);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.secondary-btn:hover {
+    background: linear-gradient(135deg, #7d3c98, var(--secondary-color));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.danger-btn {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.danger-btn:hover {
+    background: linear-gradient(135deg, #c0392b, #e74c3c);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+} 

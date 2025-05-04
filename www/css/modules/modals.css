@@ -1,0 +1,717 @@
+/* סגנונות למודאלים וחלונות קופצים */
+
+/* מודאל בסיסי */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(3px);
+}
+
+.modal.show {
+    display: flex;
+    opacity: 1;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: linear-gradient(to bottom, #fff, #f8f9fa);
+    padding: 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    transform: scale(0.7);
+    transition: transform 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    border: none;
+}
+
+.modal.show .modal-content {
+    transform: scale(1);
+}
+
+.modal-content h3 {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    padding-right: 40px;
+}
+
+.modal-content form {
+    padding-top: 5px;
+}
+
+.close-btn {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    color: #777;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    background: linear-gradient(to bottom, rgba(250, 250, 250, 0.7), rgba(240, 240, 240, 0.7));
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    z-index: 5;
+}
+
+.close-btn:hover {
+    color: #333;
+    background: linear-gradient(to bottom, rgba(245, 245, 245, 0.9), rgba(235, 235, 235, 0.9));
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* סגנונות לטפסים במודלים */
+.modal .form-group {
+    margin-bottom: 18px;
+    position: relative;
+}
+
+.modal .form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #444;
+    font-size: 0.95rem;
+}
+
+.modal .form-group input[type="text"],
+.modal .form-group input[type="number"],
+.modal .form-group input[type="time"],
+.modal .form-group select,
+.modal .form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.modal .form-group input[type="text"]:focus,
+.modal .form-group input[type="number"]:focus,
+.modal .form-group input[type="time"]:focus,
+.modal .form-group select:focus,
+.modal .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(74, 109, 167, 0.1);
+}
+
+.modal .form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.modal .form-group select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left 10px center;
+    padding-left: 30px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.modal .form-actions {
+    margin-top: 25px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.modal .form-actions .btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modal .form-actions .primary-btn {
+    background: linear-gradient(135deg, var(--primary-color), #3c5a8a);
+    color: white;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.modal .form-actions .primary-btn:hover {
+    background: linear-gradient(135deg, #3c5a8a, var(--primary-color));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.modal .form-actions .btn:not(.primary-btn) {
+    background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+    color: #444;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.modal .form-actions .btn:not(.primary-btn):hover {
+    background: linear-gradient(135deg, #e8e8e8, #f5f5f5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.modal .form-group input[type="checkbox"] {
+    margin-left: 8px;
+    transform: scale(1.2);
+    accent-color: var(--primary-color);
+}
+
+/* סגנונות ספציפיים למודלים השונים */
+#edit-task-modal .modal-content h3:before,
+#edit-shopping-modal .modal-content h3:before,
+#edit-place-modal .modal-content h3:before,
+#edit-food-modal .modal-content h3:before,
+#edit-schedule-modal .modal-content h3:before,
+#edit-info-modal .modal-content h3:before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+#edit-task-modal .modal-content h3:before {
+    content: "\f0ae"; /* אייקון רשימת משימות */
+}
+
+#edit-shopping-modal .modal-content h3:before {
+    content: "\f07a"; /* אייקון עגלת קניות */
+}
+
+#edit-place-modal .modal-content h3:before {
+    content: "\f3c5"; /* אייקון מיקום */
+}
+
+#edit-food-modal .modal-content h3:before {
+    content: "\f2e7"; /* אייקון אוכל */
+}
+
+#edit-schedule-modal .modal-content h3:before {
+    content: "\f133"; /* אייקון לוח שנה */
+}
+
+#edit-info-modal .modal-content h3:before {
+    content: "\f05a"; /* אייקון מידע */
+}
+
+/* אנימציית הופעת מודאל */
+@keyframes modalFadeIn {
+    from { 
+        opacity: 0; 
+        transform: scale(0.9) translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: scale(1) translateY(0); 
+    }
+}
+
+.modal.show .modal-content {
+    animation: modalFadeIn 0.3s ease-out forwards;
+}
+
+/* מודאל אישור מחיקה */
+#confirm-delete-modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+    backdrop-filter: blur(2px);
+}
+
+#confirm-delete-modal .modal-content {
+    max-width: 300px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: none;
+    background-color: #fff;
+    position: relative;
+    width: 85%;
+    transform: scale(0.95);
+    opacity: 0;
+    transition: all 0.2s ease-out;
+    overflow: hidden;
+}
+
+#confirm-delete-modal.show .modal-content {
+    transform: scale(1);
+    opacity: 1;
+}
+
+#confirm-delete-modal .modal-header {
+    padding: 12px 12px 0;
+    position: relative;
+    border-bottom: none;
+    background-color: transparent;
+    text-align: center;
+}
+
+#confirm-delete-modal .modal-header h2 {
+    margin: 0;
+    font-size: 1.1em;
+    color: #444;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+#confirm-delete-modal .modal-body {
+    padding: 8px 12px 0;
+    text-align: center;
+}
+
+#confirm-delete-modal .modal-footer {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 12px 12px;
+    border-top: none;
+}
+
+#confirm-delete-modal .close-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 1.1em;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #999;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+    z-index: 10;
+}
+
+#confirm-delete-modal .close-btn:hover {
+    background-color: rgba(0,0,0,0.05);
+    color: #333;
+}
+
+#confirm-delete-message {
+    text-align: center;
+    font-size: 0.9em;
+    margin: 6px 0;
+    line-height: 1.3;
+    color: #555;
+    font-weight: 400;
+}
+
+#confirm-delete-modal .btn {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    min-width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+#confirm-delete-modal #confirm-delete-cancel {
+    background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+    color: #444;
+}
+
+#confirm-delete-modal #confirm-delete-cancel:hover {
+    background: linear-gradient(135deg, #e8e8e8, #f5f5f5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+#confirm-delete-modal .primary-btn {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-weight: 500;
+}
+
+#confirm-delete-modal .primary-btn:hover {
+    background: linear-gradient(135deg, #c82333, #dc3545);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.delete-icon-container {
+    text-align: center;
+    margin: 5px 0 8px;
+}
+
+.delete-icon-large {
+    font-size: 2.2rem;
+    color: #dc3545;
+    opacity: 0.9;
+    margin: 0;
+    animation: trembleIcon 0.4s ease-in-out;
+}
+
+@keyframes trembleIcon {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-3px); }
+    40% { transform: translateX(3px); }
+    60% { transform: translateX(-2px); }
+    80% { transform: translateX(2px); }
+}
+
+/* מודאל עריכת ימים */
+.edit-days-modal .modal-content {
+    max-width: 450px;
+    border-radius: 12px;
+    background: linear-gradient(to bottom, #fff, #f8f9fa);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    border: none;
+    padding: 25px;
+}
+
+.edit-days-modal h3 {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.edit-days-modal h3:before {
+    content: "\f0cb";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+.edit-days-modal p {
+    color: #6c757d;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    background: rgba(74, 109, 167, 0.05);
+    padding: 10px 12px;
+    border-radius: 8px;
+    border-right: 3px solid var(--primary-color);
+}
+
+.days-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 15px 0;
+    max-height: 320px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(74, 109, 167, 0.3) rgba(240, 240, 240, 0.5);
+}
+
+.days-list::-webkit-scrollbar {
+    width: 6px;
+    background-color: rgba(240, 240, 240, 0.5);
+    border-radius: 3px;
+}
+
+.days-list::-webkit-scrollbar-thumb {
+    background-color: rgba(74, 109, 167, 0.3);
+    border-radius: 3px;
+}
+
+.days-list::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(74, 109, 167, 0.5);
+}
+
+.day-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.95));
+    border: 1px solid rgba(230, 230, 230, 0.8);
+    margin-bottom: 10px;
+    border-radius: 10px;
+    cursor: grab;
+    transition: all 0.2s ease;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.day-item:last-child {
+    margin-bottom: 0;
+}
+
+.day-item .day-handle {
+    color: #aaa;
+    margin-left: 10px;
+    cursor: grab;
+    transition: color 0.2s ease;
+}
+
+.day-item:hover .day-handle {
+    color: var(--primary-color);
+}
+
+.day-item .day-name {
+    flex: 1;
+    margin: 0 10px;
+    font-weight: 500;
+    font-size: 1rem;
+    color: #444;
+}
+
+.day-item .day-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.day-item .day-btn {
+    background: none;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+    margin: 0;
+    opacity: 0.6;
+}
+
+.day-item:hover .day-btn {
+    opacity: 1;
+}
+
+.day-item .day-edit-btn:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    color: #0d6efd;
+    transform: scale(1.1);
+}
+
+.day-item .day-delete-btn:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    transform: scale(1.1);
+}
+
+.day-item.deleting {
+    background: linear-gradient(to right, rgba(255, 250, 250, 0.9), rgba(255, 245, 245, 0.9));
+    border-color: rgba(220, 53, 69, 0.2);
+    border-right: 3px solid #dc3545;
+    padding-right: 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.1);
+}
+
+.day-item.deleting .day-name {
+    color: #6c757d;
+    text-decoration: line-through;
+}
+
+.day-item:hover {
+    background: linear-gradient(to right, rgba(250, 252, 255, 0.95), rgba(248, 249, 250, 0.95));
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+    border-color: rgba(74, 109, 167, 0.2);
+}
+
+.day-item.dragging {
+    opacity: 0.8;
+    box-shadow: 0 8px 20px rgba(74, 109, 167, 0.15);
+    background: linear-gradient(135deg, rgba(240, 248, 255, 0.95), rgba(230, 240, 250, 0.95));
+    cursor: grabbing;
+    z-index: 10;
+    transform: scale(1.02) rotate(1deg);
+    border-color: rgba(74, 109, 167, 0.3);
+}
+
+/* אפקט הסרה */
+.day-item.removing {
+    opacity: 0;
+    transform: translateX(50px);
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.day-warning-text {
+    color: #dc3545;
+    font-size: 0.95rem;
+    margin-top: 12px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(220, 53, 69, 0.05);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.day-warning-text i {
+    font-size: 1.1rem;
+    animation: pulsate 1.5s infinite;
+}
+
+@keyframes pulsate {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+.day-warning-description {
+    color: #6c757d;
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.edit-days-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.add-day-item-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    width: 100%;
+    margin-top: 10px;
+    background: linear-gradient(to bottom, rgba(248, 249, 250, 0.8), rgba(240, 242, 245, 0.8));
+    border: 2px dashed rgba(74, 109, 167, 0.3);
+    border-radius: 10px;
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.add-day-item-btn:hover {
+    background: linear-gradient(to bottom, rgba(240, 245, 255, 0.9), rgba(235, 242, 250, 0.9));
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 109, 167, 0.15);
+}
+
+.add-day-item-btn i {
+    font-size: 1rem;
+}
+
+/* כפתורי עריכת ימים */
+#save-days-btn {
+    background: linear-gradient(135deg, var(--primary-color), #3c5a8a);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#save-days-btn:hover {
+    background: linear-gradient(135deg, #3c5a8a, var(--primary-color));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+#save-days-btn:before {
+    content: "\f0c7";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+}
+
+#cancel-days-btn {
+    background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+    color: #444;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#cancel-days-btn:hover {
+    background: linear-gradient(135deg, #e8e8e8, #f5f5f5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+#cancel-days-btn:before {
+    content: "\f00d";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+}
+
+/* מודאל עריכה מיידי */
+.inline-edit-modal {
+    z-index: 1050;
+}
+
+.inline-edit-modal .modal-content {
+    max-width: 350px;
+} 

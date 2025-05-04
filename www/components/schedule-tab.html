@@ -38,7 +38,7 @@
 <!-- מודאל עריכת לו"ז -->
 <div id="edit-schedule-modal" class="modal">
     <div class="modal-content">
-        <span class="close-btn">&times;</span>
+        <span class="close-btn" title="סגור">&times;</span>
         <h3>עריכת פעילות</h3>
         <form id="edit-schedule-form">
             <input type="hidden" id="edit-schedule-id">
@@ -78,8 +78,8 @@
                 </label>
             </div>
             <div class="form-actions">
-                <button type="submit" class="btn primary-btn">שמור</button>
-                <button type="button" class="btn close-modal">ביטול</button>
+                <button type="submit" class="btn primary-btn" title="שמור שינויים לפעילות">שמור</button>
+                <button type="button" class="btn close-modal" title="בטל שינויים וסגור">ביטול</button>
             </div>
         </form>
     </div>
@@ -88,7 +88,7 @@
 <!-- מודאל עריכת ימים -->
 <div id="edit-days-modal" class="modal edit-days-modal">
     <div class="modal-content">
-        <span class="close-btn">&times;</span>
+        <span class="close-btn" title="סגור">&times;</span>
         <h3>ניהול ימים</h3>
         <p>גרור את הימים כדי לשנות את הסדר, ערוך את השמות, או מחק ימים לא נחוצים.</p>
         
@@ -96,13 +96,13 @@
             <!-- רשימת הימים תיווצר דינמית -->
         </ul>
         
-        <button id="add-day-item-btn" class="add-day-item-btn">
+        <button id="add-day-item-btn" class="add-day-item-btn" title="הוסף יום חדש ללו״ז">
             <i class="fas fa-plus"></i> הוסף יום חדש
         </button>
         
         <div class="edit-days-footer">
-            <button id="save-days-btn" class="btn primary-btn">שמור שינויים</button>
-            <button id="cancel-days-btn" class="btn">ביטול</button>
+            <button id="save-days-btn" class="btn primary-btn" title="שמור את השינויים בימים">שמור שינויים</button>
+            <button id="cancel-days-btn" class="btn" title="בטל את השינויים בימים">ביטול</button>
         </div>
     </div>
 </div> 

@@ -1,0 +1,103 @@
+/* סגנונות לשונית הקניות */
+
+.item-list {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.3s;
+}
+
+.item:last-child {
+    border-bottom: none;
+}
+
+.item.completed {
+    background-color: #f8f9fa;
+}
+
+.item.completed .item-text {
+    text-decoration: line-through;
+    color: #6c757d;
+}
+
+.item-text {
+    flex: 1;
+    font-size: 1rem;
+}
+
+.item-content {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.item-notes {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 4px;
+    font-style: italic;
+}
+
+.item-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.category-select {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: white;
+    font-size: 1rem;
+}
+
+.priority {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.priority-btn {
+    flex: 1;
+    text-align: center;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    background-color: white;
+    cursor: pointer;
+}
+
+.priority-btn:first-child {
+    border-radius: 8px 0 0 8px;
+}
+
+.priority-btn:last-child {
+    border-radius: 0 8px 8px 0;
+}
+
+.priority-btn.selected {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.priority-high {
+    color: var(--danger-color);
+}
+
+.priority-medium {
+    color: orange;
+}
+
+.item .priority-indicator {
+    margin-left: 0.5rem;
+    font-size: 0.8rem;
+} 

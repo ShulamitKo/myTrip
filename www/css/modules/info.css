@@ -1,0 +1,300 @@
+/* סגנונות ללשונית המידע */
+
+.info-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.info-main-info {
+    display: flex;
+    align-items: center;
+}
+
+.info-title {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-title i {
+    color: var(--primary-color);
+    font-size: 1.2em;
+}
+
+.info-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.info-action {
+    background: none;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    color: #6c757d;
+    transition: color 0.2s;
+}
+
+.info-action:hover {
+    color: #343a40;
+}
+
+.info-action.edit-action:hover {
+    color: #0d6efd;
+}
+
+.info-action.delete-action:hover {
+    color: #dc3545;
+}
+
+.info-content {
+    padding: 16px;
+    color: #495057;
+    line-height: 1.5;
+}
+
+.info-content p {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0;
+}
+
+.info-content i {
+    color: var(--primary-color);
+    width: 20px;
+    text-align: center;
+}
+
+.info-content h3 {
+    color: var(--primary-color);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#emptyInfoState {
+    text-align: center;
+    padding: 32px;
+    color: #6c757d;
+}
+
+#emptyInfoState i {
+    font-size: 48px;
+    margin-bottom: 16px;
+    color: #adb5bd;
+}
+
+#emptyInfoState h3 {
+    margin-bottom: 8px;
+    color: #495057;
+}
+
+#emptyInfoState p {
+    color: #6c757d;
+}
+
+/* טיפים */
+.tips {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tips h3 {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tips p {
+    margin: 0.8rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: #333;
+}
+
+.tips p:last-child {
+    margin-bottom: 0;
+}
+
+.tips i {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    width: 1.5rem;
+    text-align: center;
+}
+
+/* עיצוב שורות מידע */
+.info-item-row {
+    margin-bottom: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 8px;
+    background-color: #f9f9f9;
+}
+
+.info-item-inputs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-item-icon {
+    flex: 0 0 auto;
+    min-width: 120px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+}
+
+.info-item-text {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.remove-info-item-btn {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.remove-info-item-btn:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+#add-info-item-btn {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+    padding: 8px;
+    background-color: #f5f5f5;
+    border: 1px dashed #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#add-info-item-btn:hover {
+    background-color: #e9ecef;
+}
+
+/* עיצוב שורות מידע בכרטיס מידע */
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 6px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.info-row:hover {
+    background-color: #f5f5f5;
+}
+
+.info-row-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.info-row-actions {
+    display: flex;
+    gap: 4px;
+    opacity: 0.4;
+    transition: opacity 0.2s ease;
+}
+
+.info-row:hover .info-row-actions {
+    opacity: 1;
+}
+
+.edit-row-btn, .delete-row-btn {
+    background: none;
+    border: none;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.edit-row-btn:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    color: #007bff;
+}
+
+.delete-row-btn:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+.info-title {
+    position: relative;
+    padding-left: 32px;
+}
+
+.edit-title-inline {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    color: #666;
+    opacity: 0.4;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.info-title:hover .edit-title-inline {
+    opacity: 1;
+}
+
+.edit-title-inline:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    color: #007bff;
+} 

@@ -1,0 +1,18 @@
+/* משתני CSS גלובליים */
+
+:root {
+    --primary-color: #4a6da7;
+    --secondary-color: #8e44ad;
+    --accent-color: #ffc107;
+    --background-color: #f0f4f8;
+    --text-color: #3a3f51;
+    --border-color: #ddd;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --safe-area-top: env(safe-area-inset-top);
+    --safe-area-bottom: env(safe-area-inset-bottom);
+    --safe-area-left: env(safe-area-inset-left);
+    --safe-area-right: env(safe-area-inset-right);
+} 
