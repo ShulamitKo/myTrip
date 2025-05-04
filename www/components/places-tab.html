@@ -1,0 +1,101 @@
+<div class="add-item">
+    <input type="text" id="place-input" placeholder="הוסף מקום לביקור...">
+    <button id="add-place-btn" title="הוסף מקום חדש"><i class="fas fa-plus"></i></button>
+</div>
+
+<div class="section-title">
+    <i class="fas fa-map-marked-alt"></i>
+    <span>מקומות לביקור</span>
+</div>
+
+<select class="category-select" id="place-filter">
+    <option value="all">כל הקטגוריות</option>
+    <option value="attraction">אטרקציות</option>
+    <option value="museum">מוזיאונים</option>
+    <option value="food">אוכל</option>
+    <option value="nature">טבע</option>
+    <option value="other">אחר</option>
+</select>
+
+<div class="priority-filter-options" style="margin-top: 10px;">
+    <div class="filter-title">סינון לפי עדיפות:</div>
+    <div class="filter-buttons">
+        <div class="priority-filter-btn active" data-priority="high" title="הצג/הסתר מקומות בעדיפות גבוהה">
+            <i class="fas fa-exclamation-circle"></i> גבוהה
+        </div>
+        <div class="priority-filter-btn active" data-priority="medium" title="הצג/הסתר מקומות בעדיפות בינונית">
+            <i class="fas fa-circle"></i> בינונית
+        </div>
+        <div class="priority-filter-btn active" data-priority="low" title="הצג/הסתר מקומות בעדיפות נמוכה">
+            <i class="fas fa-arrow-circle-down"></i> נמוכה
+        </div>
+    </div>
+</div>
+
+<div class="item-list" id="place-list">
+    <!-- מקומות יתווספו כאן -->
+</div>
+
+<div class="empty-state" id="empty-places-state">
+    <i class="fas fa-map-marked-alt"></i>
+    <h3>אין מקומות לביקור</h3>
+    <p>הוסף מקומות שתרצה לבקר בהם במהלך הטיול</p>
+</div>
+
+<!-- מודאל עריכת מקום -->
+<div id="edit-place-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h3>עריכת מקום</h3>
+        <form id="edit-place-form">
+            <input type="hidden" id="edit-place-id">
+            
+            <div class="form-group">
+                <label for="edit-place-name">שם המקום</label>
+                <input type="text" id="edit-place-name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="edit-place-address">כתובת</label>
+                <input type="text" id="edit-place-address">
+            </div>
+            
+            <div class="form-group">
+                <label for="edit-place-category">קטגוריה</label>
+                <select id="edit-place-category">
+                    <option value="attraction">אטרקציה</option>
+                    <option value="museum">מוזיאון</option>
+                    <option value="food">אוכל</option>
+                    <option value="nature">טבע</option>
+                    <option value="other">אחר</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="edit-place-priority">עדיפות</label>
+                <select id="edit-place-priority">
+                    <option value="low">נמוכה</option>
+                    <option value="medium">בינונית</option>
+                    <option value="high">גבוהה</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="edit-place-notes">הערות</label>
+                <textarea id="edit-place-notes" rows="4"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="edit-place-visited">
+                    ביקרתי במקום
+                </label>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn primary-btn">שמור</button>
+                <button type="button" class="btn">ביטול</button>
+            </div>
+        </form>
+    </div>
+</div> 

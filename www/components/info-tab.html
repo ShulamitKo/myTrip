@@ -1,0 +1,67 @@
+<div class="add-item">
+    <input type="text" id="infoInput" placeholder="הוסף כותרת למידע חדש...">
+    <button id="addInfoBtn" title="הוסף כרטיס מידע חדש"><i class="fas fa-plus"></i></button>
+</div>
+
+<div class="section-title">
+    <i class="fas fa-info-circle"></i>
+    <span>מידע שימושי</span>
+</div>
+
+<div class="item-list" id="infoList">
+    <!-- מידע יתווסף כאן -->
+</div>
+
+<div class="empty-state" id="emptyInfoState">
+    <i class="fas fa-info-circle"></i>
+    <h3>אין מידע נוסף</h3>
+    <p>הוסף מידע שימושי לטיול שלך</p>
+</div>
+
+<!-- מודאל עריכת מידע -->
+<div id="edit-info-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h3>הוספת מידע חדש</h3>
+        <form id="edit-info-form">
+            <input type="hidden" id="edit-info-id">
+            <div class="form-group">
+                <label for="edit-info-title">כותרת</label>
+                <input type="text" id="edit-info-title" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-info-icon">אייקון כותרת</label>
+                <select id="edit-info-icon">
+                    <option value="info-circle">מידע כללי</option>
+                    <option value="money-bill-wave">כספים</option>
+                    <option value="language">שפה</option>
+                    <option value="subway">תחבורה</option>
+                    <option value="phone">תקשורת</option>
+                    <option value="landmark">אתרים</option>
+                    <option value="utensils">אוכל</option>
+                    <option value="store">קניות</option>
+                    <option value="ambulance">חירום</option>
+                    <option value="hot-tub">ספא</option>
+                    <option value="building">מבנים</option>
+                    <option value="water">מים</option>
+                    <option value="passport">דרכון</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>פריטי מידע</label>
+                <div id="info-items-container">
+                    <!-- כאן ייווצרו שורות המידע באופן דינמי -->
+                </div>
+                <button type="button" id="add-info-item-btn" class="btn secondary-btn">
+                    <i class="fas fa-plus"></i> הוסף פריט מידע
+                </button>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn primary-btn">שמור</button>
+                <button type="button" class="btn close-modal">ביטול</button>
+            </div>
+        </form>
+    </div>
+</div> 

@@ -1,0 +1,108 @@
+<div class="schedule-container">
+    <div class="day-selector">
+        <div class="edit-days-btn-container">
+            <button class="edit-days-btn" title="ערוך ימים"><i class="fas fa-pencil-alt"></i></button>
+        </div>
+        <button class="day-btn" data-day="1">יום 1</button>
+        <button class="day-btn" data-day="2">יום 2</button>
+        <button class="day-btn" data-day="3">יום 3</button>
+        <button class="day-btn active" data-day="4">יום 4</button>
+        <button class="day-btn" data-day="5">יום 5</button>
+        <button class="add-day-btn" title="הוסף יום חדש"><i class="fas fa-plus"></i></button>
+    </div>
+    
+    <div class="schedule-day-title">
+        <i class="fas fa-calendar-day"></i>
+        <span>לו"ז יומי</span>
+    </div>
+    
+    <div class="schedule-day" id="scheduleContent">
+        <div class="add-item">
+            <input type="time" id="scheduleTime">
+            <input type="text" id="scheduleInput" placeholder="הוסף פעילות ללו״ז...">
+            <button id="addScheduleBtn" title="הוסף פעילות חדשה ללו״ז"><i class="fas fa-plus"></i></button>
+        </div>
+        
+        <div class="item-list" id="scheduleList">
+            <!-- פעילויות יומיות יתווספו כאן -->
+        </div>
+        
+        <div class="empty-state" id="emptyScheduleState">
+            <i class="fas fa-calendar-day"></i>
+            <h3>אין פעילויות לו"ז</h3>
+            <p>הוסף פעילויות ללו"ז היומי שלך</p>
+        </div>
+    </div>
+</div>
+
+<!-- מודאל עריכת לו"ז -->
+<div id="edit-schedule-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h3>עריכת פעילות</h3>
+        <form id="edit-schedule-form">
+            <input type="hidden" id="edit-schedule-id">
+            <div class="form-group">
+                <label for="edit-schedule-text">פעילות</label>
+                <input type="text" id="edit-schedule-text" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-schedule-time">שעה</label>
+                <input type="time" id="edit-schedule-time" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-schedule-category">קטגוריה</label>
+                <select id="edit-schedule-category">
+                    <option value="attraction">אטרקציה</option>
+                    <option value="food">אוכל</option>
+                    <option value="transport">תחבורה</option>
+                    <option value="hotel">מלון/לינה</option>
+                    <option value="shopping">קניות</option>
+                    <option value="meeting">פגישה</option>
+                    <option value="relax">מנוחה ופנאי</option>
+                    <option value="other">אחר</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="edit-schedule-location">מיקום</label>
+                <input type="text" id="edit-schedule-location">
+            </div>
+            <div class="form-group">
+                <label for="edit-schedule-notes">הערות</label>
+                <textarea id="edit-schedule-notes"></textarea>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="edit-schedule-completed">
+                    הושלם
+                </label>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn primary-btn">שמור</button>
+                <button type="button" class="btn close-modal">ביטול</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- מודאל עריכת ימים -->
+<div id="edit-days-modal" class="modal edit-days-modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h3>ניהול ימים</h3>
+        <p>גרור את הימים כדי לשנות את הסדר, ערוך את השמות, או מחק ימים לא נחוצים.</p>
+        
+        <ul id="days-list" class="days-list">
+            <!-- רשימת הימים תיווצר דינמית -->
+        </ul>
+        
+        <button id="add-day-item-btn" class="add-day-item-btn">
+            <i class="fas fa-plus"></i> הוסף יום חדש
+        </button>
+        
+        <div class="edit-days-footer">
+            <button id="save-days-btn" class="btn primary-btn">שמור שינויים</button>
+            <button id="cancel-days-btn" class="btn">ביטול</button>
+        </div>
+    </div>
+</div> 

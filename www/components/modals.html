@@ -1,0 +1,62 @@
+<!-- מודל הגדרות -->
+<div id="settings-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h3>הגדרות</h3>
+        
+        <div class="settings-container">
+            <div class="settings-item">
+                <h3>גיבוי ושחזור נתונים</h3>
+                <p>ייצא את כל הנתונים שלך לקובץ או ייבא נתונים מקובץ קיים.</p>
+                <div class="settings-actions">
+                    <button id="exportDataBtn" class="btn primary-btn" title="שמור את כל הנתונים שלך לקובץ">
+                        <i class="fas fa-file-export"></i> ייצוא נתונים
+                    </button>
+                    <button id="importDataBtn" class="btn secondary-btn" title="טען נתונים מקובץ מגיבוי">
+                        <i class="fas fa-file-import"></i> ייבוא נתונים
+                    </button>
+                    <input type="file" id="importFileInput" style="display: none;" accept=".json">
+                </div>
+            </div>
+            
+            <div class="settings-item">
+                <h3>מחיקת נתונים</h3>
+                <p>מחק את כל הנתונים ואפס את האפליקציה. פעולה זו אינה ניתנת לביטול!</p>
+                <button id="resetAppBtn" class="btn danger-btn" title="מחק את כל הנתונים ואפס את האפליקציה">
+                    <i class="fas fa-trash-alt"></i> מחק את כל הנתונים
+                </button>
+            </div>
+            
+            <div class="settings-item">
+                <h3>אודות</h3>
+                <p>MyTrip - גרסה 1.0.0</p>
+                <p>אפליקציה לניהול הטיול שלך</p>
+                <p><a href="privacy_policy.html" id="privacy-policy-link" target="_blank" title="מדיניות הפרטיות של האפליקציה (יפתח בחלון חדש)">מדיניות פרטיות</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- מודל אישור מחיקה -->
+<div id="confirm-delete-modal" class="modal">
+    <div class="modal-content">
+        <button class="close-btn" title="סגור">&times;</button>
+        <div class="modal-header">
+            <h2 id="confirm-delete-title">אישור מחיקה</h2>
+        </div>
+        <div class="modal-body">
+            <div class="delete-icon-container">
+                <i class="fas fa-trash-alt delete-icon-large"></i>
+            </div>
+            <p id="confirm-delete-message">האם למחוק את הפריט?</p>
+        </div>
+        <div class="modal-footer">
+            <button id="confirm-delete-cancel" class="btn" title="ביטול">
+                <i class="fas fa-times"></i> ביטול
+            </button>
+            <button id="confirm-delete-confirm" class="btn primary-btn" title="אישור מחיקה">
+                <i class="fas fa-trash-alt"></i> מחק
+            </button>
+        </div>
+    </div>
+</div> 

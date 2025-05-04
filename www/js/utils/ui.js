@@ -3,6 +3,62 @@
  */
 
 /**
+ * פונקציה לטעינת רכיבים HTML מקבצים חיצוניים
+ * @param {string} url - הנתיב לקובץ ה-HTML
+ * @returns {Promise<string>} - ה-HTML כמחרוזת
+ */
+export async function loadComponent(url) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`שגיאה בטעינת ${url}: ${response.status}`);
+        }
+        return await response.text();
+    } catch (error) {
+        console.error(`שגיאה בטעינת רכיב מ-${url}:`, error);
+        return '';
+    }
+}
+
+/**
+ * פונקציה להטמעת רכיב HTML בתוך אלמנט
+ * @param {string} elementId - המזהה של האלמנט המארח
+ * @param {string} componentUrl - הנתיב לקובץ רכיב ה-HTML
+ */
+export async function insertComponent(elementId, componentUrl) {
+    const element = document.getElementById(elementId);
+    if (!element) {
+        console.error(`לא נמצא אלמנט עם מזהה: ${elementId}`);
+        return;
+    }
+    
+    const html = await loadComponent(componentUrl);
+    element.innerHTML = html;
+}
+
+/**
+ * טעינת כל הרכיבים המודולריים
+ */
+export async function loadAllComponents() {
+    // טעינת הלשוניות
+    await insertComponent('tabsContainer', 'components/tabs.html');
+    
+    // טעינת תוכן הלשוניות
+    await insertComponent('tasksTabContent', 'components/tasks-tab.html');
+    await insertComponent('shoppingTabContent', 'components/shopping-tab.html');
+    await insertComponent('placesTabContent', 'components/places-tab.html');
+    await insertComponent('foodTabContent', 'components/food-tab.html');
+    await insertComponent('scheduleTabContent', 'components/schedule-tab.html');
+    await insertComponent('infoTabContent', 'components/info-tab.html');
+    
+    // טעינת המודאלים
+    await insertComponent('modalsContainer', 'components/modals.html');
+    
+    // טעינת תפריט התחתון
+    await insertComponent('navBarContainer', 'components/nav-bar.html');
+}
+
+/**
  * פתיחת מודאל
  * @param {string} modalId - המזהה של המודאל לפתיחה
  */

@@ -1,0 +1,59 @@
+<div class="add-item">
+    <input type="text" id="taskInput" placeholder="הוסף משימה חדשה...">
+    <button id="addTaskBtn" title="הוסף משימה חדשה"><i class="fas fa-plus"></i></button>
+</div>
+
+<div class="filter-options">
+    <div class="filter-btn" data-filter="all">הכל</div>
+    <div class="filter-btn active" data-filter="active">משימות פעילות</div>
+    <div class="filter-btn" data-filter="completed">משימות שהושלמו</div>
+    <div class="filter-btn" data-filter="high">עדיפות גבוהה</div>
+</div>
+
+<div class="section-title">
+    <i class="fas fa-clipboard-list"></i>
+    <span>המשימות שלי</span>
+</div>
+
+<div class="item-list" id="taskList">
+    <!-- משימות יתווספו כאן -->
+</div>
+
+<div class="empty-state" id="emptyTasksState">
+    <i class="fas fa-tasks"></i>
+    <h3>אין משימות</h3>
+    <p>הוסף משימות לטיול שלך</p>
+</div>
+
+<!-- מודאל עריכת משימה -->
+<div id="edit-task-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h3>עריכת משימה</h3>
+        <form id="edit-task-form">
+            <input type="hidden" id="edit-task-id">
+            <div class="form-group">
+                <label for="edit-task-text">תיאור המשימה</label>
+                <input type="text" id="edit-task-text" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-task-priority">עדיפות</label>
+                <select id="edit-task-priority">
+                    <option value="low">נמוכה</option>
+                    <option value="medium">בינונית</option>
+                    <option value="high">גבוהה</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="edit-task-completed">
+                    משימה הושלמה
+                </label>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn primary-btn">שמור</button>
+                <button type="button" class="btn">ביטול</button>
+            </div>
+        </form>
+    </div>
+</div> 

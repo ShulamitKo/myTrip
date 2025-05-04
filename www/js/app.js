@@ -7,7 +7,7 @@ import { initPlacesTab } from './tabs/places.js';
 import { initFoodTab } from './tabs/food.js';
 import { initScheduleTab } from './tabs/schedule.js';
 import { initInfoTab } from './tabs/info.js';
-import { showToast, setupSettingsHandlers } from './utils/ui.js';
+import { showToast, setupSettingsHandlers, loadAllComponents } from './utils/ui.js';
 
 // אתחול אזורים בטוחים למכשירים מודרניים
 function initializeDeviceCompat() {
@@ -129,8 +129,27 @@ function editTitle() {
 /**
  * אתחול האפליקציה בטעינת העמוד
  */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     console.log('DOM Content Loaded');
+    
+    try {
+        // טעינת כל הרכיבים המודולריים
+        console.log('טוען רכיבים מודולריים...');
+        await loadAllComponents();
+        console.log('טעינת רכיבים הושלמה בהצלחה!');
+    } catch (error) {
+        console.error('שגיאה בטעינת רכיבים:', error);
+        // הצגת שגיאה גם בממשק המשתמש במקרה של תקלה
+        const errorMessage = document.createElement('div');
+        errorMessage.style.color = 'red';
+        errorMessage.style.padding = '20px';
+        errorMessage.style.margin = '20px';
+        errorMessage.style.border = '1px solid red';
+        errorMessage.innerHTML = `<h2>שגיאה בטעינת הרכיבים</h2>
+            <p>${error.message}</p>
+            <p>נא לרענן את העמוד או לפנות לתמיכה.</p>`;
+        document.body.prepend(errorMessage);
+    }
     
     // אתחול אזורים בטוחים
     initializeDeviceCompat();

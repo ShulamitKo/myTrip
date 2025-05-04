@@ -1,0 +1,75 @@
+<div class="add-item">
+    <input type="text" id="shoppingInput" placeholder="הוסף פריט לרשימת הקניות...">
+    <button id="addShoppingBtn" title="הוסף פריט לרשימת הקניות"><i class="fas fa-plus"></i></button>
+</div>
+
+<div class="section-title">
+    <i class="fas fa-shopping-cart"></i>
+    <span>רשימת הקניות שלי</span>
+</div>
+
+<select class="category-select" id="categoryFilter">
+    <option value="all">כל הקטגוריות</option>
+    <option value="clothing">ביגוד</option>
+    <option value="electronics">אלקטרוניקה</option>
+    <option value="toiletries">טואלטיקה</option>
+    <option value="gifts">מתנות</option>
+    <option value="food">מזון</option>
+    <option value="medicine">תרופות</option>
+    <option value="other">אחר</option>
+</select>
+
+<div class="item-list" id="shoppingList">
+    <!-- פריטי קניות יתווספו כאן -->
+</div>
+
+<div class="empty-state" id="emptyShoppingState">
+    <i class="fas fa-shopping-bag"></i>
+    <h3>אין פריטים ברשימת הקניות</h3>
+    <p>הוסף פריטים שברצונך לקנות בטיול</p>
+</div>
+
+<!-- מודאל עריכת פריט קניות -->
+<div id="edit-shopping-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h3>עריכת פריט קניות</h3>
+        <form id="edit-shopping-form">
+            <input type="hidden" id="edit-shopping-id">
+            <div class="form-group">
+                <label for="edit-shopping-text">שם הפריט</label>
+                <input type="text" id="edit-shopping-text" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-shopping-category">קטגוריה</label>
+                <select id="edit-shopping-category">
+                    <option value="clothing">ביגוד</option>
+                    <option value="electronics">אלקטרוניקה</option>
+                    <option value="toiletries">טואלטיקה</option>
+                    <option value="gifts">מתנות</option>
+                    <option value="food">מזון</option>
+                    <option value="medicine">תרופות</option>
+                    <option value="other">אחר</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="edit-shopping-quantity">כמות</label>
+                <input type="number" id="edit-shopping-quantity" min="1" value="1">
+            </div>
+            <div class="form-group">
+                <label for="edit-shopping-notes">הערות</label>
+                <textarea id="edit-shopping-notes"></textarea>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="edit-shopping-completed">
+                    נרכש
+                </label>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn primary-btn">שמור</button>
+                <button type="button" class="btn">ביטול</button>
+            </div>
+        </form>
+    </div>
+</div> 
